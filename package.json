@@ -1,0 +1,16 @@
+{
+  "name": "irc-electron",
+  "version": "0.0.1",
+  "description": "Irc client with electron",
+  "main": "main.js",
+  "scripts": {
+    "test": "electron ."
+  },
+  "keywords": [
+    "electron",
+    "irc",
+    "client"
+  ],
+  "author": "Kaotisk Hund",
+  "license": "GPL-3.0"
+}
