@@ -1,0 +1,13 @@
+body {
+	max-width: 800px;
+}
+
+.messages {
+	border-color: rgba(255,50,50,0.5);
+	border-width: 2px;
+	background-color: rgba(100,25,25,0.2);
+	max-height: 400px; 
+	height: 400px;
+	width: 100%;
+	scroll-behavior: smooth;
+}
