@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
-	<div class="grid-x">
+	<div class="grid-container">
 		<div class="small-12 cell">
 			<div class="stats">
 				<h1>Settings</h1>
@@ -22,5 +22,21 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		const electron = require('electron');
+		const {ipcRenderer} = electron;
+
+		document.querySelector('#settings').addEventListener('submit', submitForm);
+	    function submitForm(e){
+	      e.preventDefault();
+	      const nickname = document.querySelector('#nickname').value;
+	      const server = document.querySelector('#server').value;
+	      const channel = document.querySelector('#channel').value;
+
+	      const thadata = {server, nickname, channel}
+
+	      ipcRenderer.send('irc_connect', thadata);
+	    }
+	</script>
 </body>
 </html>
