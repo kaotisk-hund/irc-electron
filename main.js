@@ -162,7 +162,10 @@ const mainMenuTemplate =  [
   	label: 'Options',
   	submenu:[
   		{
-  			label:'Connection settings'
+  			label:'Connection settings',
+  			click(){
+  				settingsWindow();
+  			}
   		},
   		{
   			label:'Connect'
