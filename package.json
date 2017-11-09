@@ -4,7 +4,7 @@
   "description": "Irc client with electron",
   "main": "main.js",
   "scripts": {
-    "test": "electron ."
+    "start": "electron ."
   },
   "keywords": [
     "electron",
@@ -12,5 +12,9 @@
     "client"
   ],
   "author": "Kaotisk Hund",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "dependencies": {
+    "electron": "^1.7.9",
+    "irc": "^0.5.2"
+  }
 }
