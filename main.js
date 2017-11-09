@@ -3,6 +3,9 @@ const url = require('url')
 const path = require('path')
 const irc = require('irc')
 process.env.NODE_ENV = 'production'
+
+let server
+let nickname
 let client
 let channel
 let message
@@ -71,8 +74,8 @@ ipcMain.on('irc_send', function(e, message){
 ipcMain.on('irc_connect', function(e, thadata){
   //win.webContents.send('irc:connect', thadata);
   client = null
-  var server = thadata.server;
-  var nickname = thadata.nickname;
+  server = thadata.server;
+  nickname = thadata.nickname;
   channel = thadata.channel;
   const username = nickname+'_kirc';
   const realname = nickname+' at KiRc';
