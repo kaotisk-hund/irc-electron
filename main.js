@@ -38,6 +38,25 @@ try {
 	  Menu.setApplicationMenu(mainMenu);
 	}
 
+	/*
+	 * Creates settings window
+	 */
+	function settingsWindow(){
+		setWin = new BrowserWindow()
+
+		setWin.loadURL(url.format({
+			pathname: path.join(__dirname, 'settings.html'),
+			protocol: 'file:',
+			slashes: true
+		}))
+		setWin.on('closed', () => {
+	    	// Dereference the window object, usually you would store windows
+	    	// in an array if your app supports multi windows, this is the time
+	    	// when you should delete the corresponding element.
+	    	setWin = null
+		})
+	}
+
 
 // Send message
 ipcMain.on('irc_send', function(e, message){
