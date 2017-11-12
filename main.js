@@ -6,7 +6,7 @@ process.env.NODE_ENV = 'production'
 
 let server
 let nickname
-let client
+let client = null
 let channel
 let message
 let tmp
