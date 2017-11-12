@@ -74,7 +74,7 @@ ipcMain.on('irc_send', function(e, message){
 // Catch irc_connect
 ipcMain.on('irc_connect', function(e, thadata){
   //win.webContents.send('irc:connect', thadata);
-  client = null
+
   server = thadata.server;
   nickname = thadata.nickname;
   channel = thadata.channel;
