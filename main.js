@@ -68,6 +68,8 @@ try {
 
 // Send message
 ipcMain.on('irc_send', function(e, message){
+	client.say(channel,message)
+	addMessageToBoard(nickname,message);
 })
 
 // Catch irc_connect
@@ -101,10 +103,10 @@ ipcMain.on('irc_connect', function(e, thadata){
    }
    console.log('.............')
   
-  	var data = {from, message}
-    win.webContents.send('irc_message', data);
+  
   client.join(channel);
   client.addListener('message'+channel, function (from, message) {
+	addMessageToBoard(from,message);
     console.log(from + ': ' + message);
     //tmp.say(channel, 'goystareis?');
 
@@ -117,6 +119,12 @@ ipcMain.on('irc_connect', function(e, thadata){
 
 function disconnect(){
 	client = null;
+}
+
+function addMessageToBoard(from,message){
+	var data = {from, message};
+    win.webContents.send('irc_message', data);
+    data = null;
 }
 
 // This method will be called when Electron has finished
