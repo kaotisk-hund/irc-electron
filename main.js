@@ -5,6 +5,8 @@ const irc = require('irc')
 const irclient = require('./lib/irclient.js')
 process.env.NODE_ENV = 'development'
 
+console.log(irclient)
+
 let server
 let nickname
 let client = null
@@ -44,6 +46,7 @@ try {
 	  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 	  // Insert menu
 	  Menu.setApplicationMenu(mainMenu);
+	  return win;
 	}
 
 	/*
