@@ -68,7 +68,6 @@ try {
 
 // Send message
 ipcMain.on('irc_send', function(e, message){
-	tmp.say(channel,message)
 })
 
 // Catch irc_connect
@@ -84,18 +83,28 @@ ipcMain.on('irc_connect', function(e, thadata){
   console.log(server)
   console.log(nickname)
   console.log(channel)
-  tmp = new irc.Client(server, nickname, {
-	channels: [
-		channel
-	],
-	userName: username,
-	realName: realname
-  });
+  console.log('.............')
+
+   if (client === null){
+   	client = new irc.Client(server, nickname, {
+		channels: [
+			channel
+		],
+		userName: username,
+		realName: realname
+	  });
+   	console.log('CDed')
+   	console.log('Nickname: '+nickname)
+   } else {
+   	client = null
+   	console.log('DCed')
+   }
+   console.log('.............')
   
-  tmp.join(channel);
-  tmp.addListener('message'+channel, function (from, message) {
   	var data = {from, message}
     win.webContents.send('irc_message', data);
+  client.join(channel);
+  client.addListener('message'+channel, function (from, message) {
     console.log(from + ': ' + message);
     //tmp.say(channel, 'goystareis?');
 
