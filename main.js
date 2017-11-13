@@ -149,8 +149,9 @@ const mainMenuTemplate =  [
   		},
   		{
   			label:'Disconnect',
+	        accelerator:process.platform == 'darwin' ? 'Command+D' : 'Ctrl+D',
   			click(){
-  				disconnect();
+  				irclient.disconnect();
   			}
   		}
   	]
