@@ -3,7 +3,7 @@ const url = require('url')
 const path = require('path')
 const irc = require('irc')
 const irclient = require('./lib/irclient.js')
-process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'development'
 
 let server
 let nickname
