@@ -69,7 +69,7 @@ try {
 // Send message
 ipcMain.on('irc_send', function(e, message){
 	client.say(channel,message)
-	addMessageToBoard(nickname,message);
+	addMessageToBoard(nickname,message,win);
 })
 
 // Catch irc_connect
