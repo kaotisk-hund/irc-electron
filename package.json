@@ -14,6 +14,10 @@
     "irc",
     "client"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaotisk-hund/irc-electron.git"
+  },
   "author": "Kaotisk Hund",
   "license": "GPL-3.0",
   "dependencies": {
