@@ -9,7 +9,6 @@ let nickname
 let client = null
 let channel
 let message
-let tmp
 let win
 
 try {
@@ -108,7 +107,6 @@ ipcMain.on('irc_connect', function(e, thadata){
   client.addListener('message'+channel, function (from, message) {
 	addMessageToBoard(from,message);
     console.log(from + ': ' + message);
-    //tmp.say(channel, 'goystareis?');
 
   });
   
@@ -162,7 +160,7 @@ const mainMenuTemplate =  [
   {
     label: 'File',
     submenu:[
-      {
+    /*   {
         label:'Add Item',
         click(){
           createAddWindow();
@@ -173,7 +171,7 @@ const mainMenuTemplate =  [
         click(){
           mainWindow.webContents.send('item:clear');
         }
-      },
+      },*/
       {
         label: 'Quit',
         accelerator:process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
