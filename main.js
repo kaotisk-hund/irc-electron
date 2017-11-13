@@ -74,14 +74,10 @@ ipcMain.on('irc_send', function(e, message){
 
 // Catch irc_connect
 ipcMain.on('irc_connect', function(e, thedata){
-	irclient.connect(e, thedata)
+	client = irclient.connect(e, thedata, client)
 });
 
-function addMessageToBoard(from,message){
-	var data = {from, message};
-    win.webContents.send('irc_message', data);
-    data = null;
-}
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
