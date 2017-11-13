@@ -2,6 +2,7 @@ const {app, BrowserWindow, ipcMain, Menu} = require('electron')
 const url = require('url')
 const path = require('path')
 const irc = require('irc')
+const irclient = require('./lib/irclient.js')
 process.env.NODE_ENV = 'production'
 
 let server
@@ -72,52 +73,9 @@ ipcMain.on('irc_send', function(e, message){
 })
 
 // Catch irc_connect
-ipcMain.on('irc_connect', function(e, thadata){
-  //win.webContents.send('irc:connect', thadata);
-  console.log(e)
-  server = thadata.server;
-  nickname = thadata.nickname;
-  channel = thadata.channel;
-  const username = nickname+'_kirc';
-  const realname = nickname+' at KiRc';
- 
-  console.log(server)
-  console.log(nickname)
-  console.log(channel)
-  console.log('.............')
-
-   if (client === null){
-   	client = new irc.Client(server, nickname, {
-		channels: [
-			channel
-		],
-		userName: username,
-		realName: realname
-	  });
-   	console.log('CDed')
-   	console.log('Nickname: '+nickname)
-   } else {
-   	client = null
-   	console.log('DCed')
-   }
-   console.log('.............')
-  
-  
-  client.join(channel);
-  client.addListener('message'+channel, function (from, message) {
-	addMessageToBoard(from,message);
-    console.log(from + ': ' + message);
-
-  });
-  
-  //addWindow.close(); 
-  // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
-  //addWindow = null;
+ipcMain.on('irc_connect', function(e, thedata){
+	irclient.connect(e, thedata)
 });
-
-function disconnect(){
-	client = null;
-}
 
 function addMessageToBoard(from,message){
 	var data = {from, message};
