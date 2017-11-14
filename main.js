@@ -68,6 +68,14 @@ try {
 		})
 	}
 
+// Add a message at channel listener
+if (client !== null){
+	client.addListener('message'+channel, function (from, message) {
+		addMessageToBoard(from,message,win);
+		console.log(from + ': ' + message);
+	});
+}
+
 
 // Send message
 ipcMain.on('irc_send', function(e, message){
