@@ -61,20 +61,13 @@ try {
 			slashes: true
 		}))
 		setWin.on('closed', () => {
-	    	// Dereference the window object, usually you would store windows
-	    	// in an array if your app supports multi windows, this is the time
-	    	// when you should delete the corresponding element.
-	    	setWin = null
+				// Dereference the window object, usually you would store windows
+				// in an array if your app supports multi windows, this is the time
+				// when you should delete the corresponding element.
+				setWin = null
 		})
 	}
 
-// Add a message at channel listener
-if (client !== null){
-	client.addListener('message'+channel, function (from, message) {
-		addMessageToBoard(from,message,win);
-		console.log(from + ': ' + message);
-	});
-}
 	/*
 	 * A function for sending messages to mainWindow
 	 */
@@ -85,18 +78,29 @@ if (client !== null){
 	}
 
 
-// Send message
 ipcMain.on('irc_send', function(e, message){
 	client.say(channel,message)
 	addMessageToBoard(nickname,message,win);
-})
 
-// Catch irc_connect
-ipcMain.on('irc_connect', function(e, thedata){
-	client = irclient.connect(e, thedata, client)
-});
+	// Add a message at channel listener
+	if (client !== null){
+		client.addListener('message'+channel, function (from, message) {
+			addMessageToBoard(from,message);
+			console.log(from + ': ' + message);
+		});
+	}
+
+
+	// Send message
+			client.say(channel,message)
+	})
+
+	// Catch irc_connect
+	ipcMain.on('irc_connect', function(e, thedata){
+		client = irclient.connect(e, thedata, client)
 		channel = client.opt.channels[0]
 		win.webContents.send('irc_cded')
+	});
 
 
 
@@ -122,10 +126,10 @@ ipcMain.on('irc_connect', function(e, thedata){
 		}
 	})
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+	// In this file you can include the rest of your app's specific main process
+	// code. You can also put them in separate files and require them here.
 } catch (e){
-  console.log(e.message);
+	console.log(e.message);
 }
 
 
