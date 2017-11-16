@@ -78,7 +78,6 @@ try {
 	}
 
 
-	addMessageToBoard(nickname,message,win);
 
 	// Add a message at channel listener
 	if (client !== null){
@@ -93,6 +92,7 @@ try {
 	ipcMain.on('irc_send', function(e, data){
 		message = data;
 			client.say(channel,message)
+		addMessageToBoard(nickname,message);
 	})
 
 	// Catch irc_connect
