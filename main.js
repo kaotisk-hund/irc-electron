@@ -91,7 +91,12 @@ try {
 	// Send message
 	ipcMain.on('irc_send', function(e, data){
 		message = data;
+		if (client === null) {
+			console.log('wtf???')
+		} else {
+			console.log(channel)
 			client.say(channel,message)
+		}
 		addMessageToBoard(nickname,message);
 	})
 
