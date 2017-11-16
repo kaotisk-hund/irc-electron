@@ -105,7 +105,30 @@ try {
 				setWin = null
 		})
 	}
+	/*
+	 * Creates about window
+	 */
+	function aboutWindow(){
+		setWin = new BrowserWindow({width: 300, height: 330})
 
+		setWin.loadURL(url.format({
+			pathname: path.join(__dirname, 'about.html'),
+			protocol: 'file:',
+			slashes: true
+		}))
+		setWin.on('closed', () => {
+				// Dereference the window object, usually you would store windows
+				// in an array if your app supports multi windows, this is the time
+				// when you should delete the corresponding element.
+				setWin = null
+		})
+	}
+
+
+
+
+
+	// SOME OTHER PART OF THE PROGRAM
 	/*
 	 * A function for sending messages to mainWindow
 	 */
