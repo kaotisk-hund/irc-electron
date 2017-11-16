@@ -46,9 +46,11 @@
     	document.querySelector('#messaging').addEventListener('submit', sendMessage);
     	function sendMessage(e){
     		e.preventDefault();
-    		const message = document.querySelector('#message').value;
+    		message = document.querySelector('#message').value;
 
     		ipcRenderer.send('irc_send', message);
+
+    		message.value = '';
     	}
 
 	    /*
