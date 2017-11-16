@@ -75,6 +75,14 @@ if (client !== null){
 		console.log(from + ': ' + message);
 	});
 }
+	/*
+	 * A function for sending messages to mainWindow
+	 */
+	function addMessageToBoard(from,message){
+		var data = {from, message};
+			win.webContents.send('irc_message', data);
+			data = null;
+	}
 
 
 // Send message
