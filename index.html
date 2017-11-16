@@ -62,6 +62,19 @@
 	      p.appendChild(message);
 	      div.appendChild(p);
 	    });
+
+	    /*
+	     * Connected show!
+	     */
+	    const status = document.querySelector('#status');
+	    ipcRenderer.on('irc_cded', function(e, data){
+	    	const button_cded = document.createElement('button');
+	    	button_cded.type = 'button'
+	    	button_cded.className = 'button success';
+	    	const cded_mess = document.createTextNode('Connected')
+	    	button_cded.appendChild(cded_mess);
+	    	status.appendChild(button_cded);
+	    });
 		
 
 	</script>

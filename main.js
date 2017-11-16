@@ -95,6 +95,7 @@ ipcMain.on('irc_send', function(e, message){
 ipcMain.on('irc_connect', function(e, thedata){
 	client = irclient.connect(e, thedata, client)
 });
+		win.webContents.send('irc_cded')
 
 
 
