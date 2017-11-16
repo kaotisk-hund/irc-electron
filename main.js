@@ -1,12 +1,40 @@
+/*
+ * This is the main.js file. The file that electron runs.
+ * While this is done there are some things going on here!
+ * -Duh!
+ * -I know, right?
+ * Well, I am going to fully document this, show read comments
+ * below.
+ */
+
+// Getting 4 basic elements of electron into place
 const {app, BrowserWindow, ipcMain, Menu} = require('electron')
+// Required so we can load urls
 const url = require('url')
+// ... and paths
 const path = require('path')
+
+// Now, we are going to use node-irc for our project also.
 const irc = require('irc')
+// This is a temporary library just for learning how to make one.
 const irclient = require('./lib/irclient.js')
+
+// Set NODE_ENV to either 'production' or 'development'.
 process.env.NODE_ENV = 'development'
 
+/*
+ * Test line for irclient (eg if successfully loaded)
+ * Lesson learnt: Outputs the functions that this module exports
+ */
 console.log(irclient)
 
+/*
+ * Here I am setting some variables that I want to have
+ * central access from here.
+ * 
+ * client variable is set to null so that we know that
+ * when the program starts
+ */
 let server
 let nickname
 let client = null
@@ -14,7 +42,17 @@ let channel
 let message
 let win
 
+
+/*
+ * I thought it would be nice to use try and catch for
+ * this project and also learn it better this way
+ */
 try {
+
+	/*
+	 * This is the section where 2 windows are set.
+	 * mainWindow() and settingsWindow().
+	 */
 
 	/*
 	 * Creates the main window!!!
@@ -137,6 +175,12 @@ try {
 	console.log(e.message);
 }
 
+
+/*
+ * This is the part of the program that creates
+ * the main menu.
+ *
+ */
 
 // Create menu template
 const mainMenuTemplate =	[
