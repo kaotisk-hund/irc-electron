@@ -306,7 +306,7 @@ const mainMenuTemplate =	[
 				label:'Disconnect',
 					accelerator:process.platform == 'darwin' ? 'Command+D' : 'Ctrl+D',
 				click(){
-					irclient.disconnect(client);
+					disconnect(client);
 				}
 			}
 		]
