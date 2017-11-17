@@ -109,18 +109,18 @@ try {
 	 * Creates about window
 	 */
 	function aboutWindow(){
-		setWin = new BrowserWindow({width: 300, height: 330})
+		about = new BrowserWindow({width: 300, height: 330})
 
-		setWin.loadURL(url.format({
+		about.loadURL(url.format({
 			pathname: path.join(__dirname, 'about.html'),
 			protocol: 'file:',
 			slashes: true
 		}))
-		setWin.on('closed', () => {
+		about.on('closed', () => {
 				// Dereference the window object, usually you would store windows
 				// in an array if your app supports multi windows, this is the time
 				// when you should delete the corresponding element.
-				setWin = null
+				about = null
 		})
 	}
 
