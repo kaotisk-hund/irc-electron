@@ -1,6 +1,6 @@
 {
   "name": "irc-electron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Irc client with electron",
   "main": "main.js",
   "scripts": {
