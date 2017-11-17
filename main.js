@@ -91,7 +91,7 @@ try {
 	 * Creates settings window
 	 */
 	function settingsWindow(){
-		setWin = new BrowserWindow({width: 300, height: 330})
+		setWin = new BrowserWindow({width: 300, height: 350})
 
 		setWin.loadURL(url.format({
 			pathname: path.join(__dirname, 'settings.html'),
