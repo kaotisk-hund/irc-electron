@@ -132,10 +132,9 @@ try {
 	/*
 	 * A function for sending messages to mainWindow
 	 */
-	function addMessageToBoard(from,message){
-		var data = {from, message};
-			win.webContents.send('irc_message', data);
-			data = null;
+	function addMessageToBoard(data){
+		win.webContents.send('irc_message', data);
+		data = null;
 	}
 
 
