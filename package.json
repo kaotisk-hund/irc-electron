@@ -1,6 +1,6 @@
 {
   "name": "irc-electron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Irc client with electron",
   "main": "main.js",
   "scripts": {
@@ -14,6 +14,10 @@
     "irc",
     "client"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaotisk-hund/irc-electron.git"
+  },
   "author": "Kaotisk Hund",
   "license": "GPL-3.0",
   "dependencies": {

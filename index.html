@@ -10,11 +10,22 @@
   </head>
 <body>
 	<div class="grid-container">
-		<div class="small-12 cell">
-			<div>
+		<div class="grid-x">
+			<div class="small-9 cell">
 				<h2>Messages</h2>
 			</div>
-			<div class="messages">
+			<div id="status" class="small-3 cell">
+				
+			</div>
+		</div>
+			
+		<div class="small-12 cell">
+
+			<div class="messages" style="
+				max-height: 400px;
+				overflow: scroll;
+				height: 400px;
+			">
 			</div>
 			<div class="send">
 				<form id="messaging">
@@ -35,9 +46,11 @@
     	document.querySelector('#messaging').addEventListener('submit', sendMessage);
     	function sendMessage(e){
     		e.preventDefault();
-    		const message = document.querySelector('#message').value;
+    		message = document.querySelector('#message').value;
 
     		ipcRenderer.send('irc_send', message);
+
+    		message.value = '';
     	}
 
 	    /*
@@ -50,6 +63,19 @@
 	      const message = document.createTextNode(data.from + ": " + data.message);
 	      p.appendChild(message);
 	      div.appendChild(p);
+	    });
+
+	    /*
+	     * Connected show!
+	     */
+	    const status = document.querySelector('#status');
+	    ipcRenderer.on('irc_cded', function(e, data){
+	    	const button_cded = document.createElement('button');
+	    	button_cded.type = 'button'
+	    	button_cded.className = 'button success';
+	    	const cded_mess = document.createTextNode('Connected')
+	    	button_cded.appendChild(cded_mess);
+	    	status.appendChild(button_cded);
 	    });
 		
 
