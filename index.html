@@ -56,7 +56,8 @@
 
 			ipcRenderer.send('irc_send', message);
 
-			message.value = '';
+			message = '';
+			document.querySelector('#message').value = '';
 		}
 
 		/*
