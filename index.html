@@ -15,7 +15,7 @@
 				<h2>Messages</h2>
 			</div>
 			<div id="status" class="small-3 cell">
-				<button id="dc" class="button alert">Disconnected</button>
+				<button id="status-button" class="button alert">Disconnected</button>
 			</div>
 		</div>
 			
@@ -67,18 +67,15 @@
 
 		/*
 		 * Connected show!
+		 * For now if you are connected once, it does change to connected.
+		 * TODO: Change back to disconnected when disconnected.
 		 */
 		const status = document.querySelector('#status');
 		ipcRenderer.on('irc_cded', function(e, data){
-			const button_dced = document.querySelector('#dc');
-			button_dced.hide();
-			const button_cded = document.createElement('button');
-			button_cded.type = 'button'
-			button_cded.className = 'button success';
-			const cded_mess = document.createTextNode('Connected')
-			button_cded.appendChild(cded_mess);
-
-			status.appendChild(button_cded);
+			const button_dced = document.querySelector('#status-button');
+			button_dced.className = 'button success';
+			const cded_mess = 'Connected';
+			button_dced.innerHTML = cded_mess;
 		});
 		
 
