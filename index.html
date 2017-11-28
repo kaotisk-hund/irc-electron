@@ -9,36 +9,38 @@
 		<link rel="stylesheet" href="assets/css/app.css">
 	</head>
 <body>
-	<div class="grid-container">
-		<div class="grid-x">
-			<div class="small-9 cell">
+	<div id="main" class="grid-container">
+		<div id="top" class="grid-x">
+			<div id="title-i-guess" class="small-9 cell">
 				<h2>Messages</h2>
 			</div>
 			<div id="status" class="small-3 cell">
 				<button id="status-button" class="button alert">Disconnected</button>
 			</div>
 		</div>
-			
-		<div class="small-12 cell">
-
-			<div class="messages" style="
+	</div>
+	<div class="grid-container">
+		<div class="grid-x">
+			<div class="small-12 cell messages" style="
 				max-height: 400px;
 				overflow: scroll;
 				height: 400px;
 			">
 			</div>
-			<div class="send">
-				<form id="messaging">
-					<div class="grid-x">
-						<div class="small-9 cell">
-							<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
-						</div>
-						<div class="small-3 cell">
-							<button class="button" type="submit">Send</button>
-						</div>						
+		</div>
+	</div>
+	<div class="grid-container">
+		<div class="send">
+			<form id="messaging">
+				<div class="grid-x">
+					<div class="small-9 cell">
+						<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
 					</div>
-				</form>
-			</div>
+					<div class="small-3 cell">
+						<button class="button" type="submit">Send</button>
+					</div>						
+				</div>
+			</form>
 		</div>
 	</div>
 
@@ -65,7 +67,7 @@
 		 */
 		const div = document.querySelector('.messages');
 		ipcRenderer.on('irc_message', function(e, data){
-			const p = document.createElement('p');
+			const p = document.createElement('pre');
 			p.className = 'message';
 			const message = document.createTextNode(data.from + ": " + data.message);
 			p.appendChild(message);
