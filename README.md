@@ -2,20 +2,15 @@
 
 [![Build Status](https://travis-ci.org/kaotisk-hund/irc-electron.svg?branch=master)](https://travis-ci.org/kaotisk-hund/irc-electron)
 
-This is a multiplatform IRC client.
+A multiplatform IRC client
 
-Binaries coming in next releases (I guess v0.0.3) <- Okay, I did it from v0.0.2.
+Binaries availiable [here](https://github.com/kaotisk-hund/irc-electron/releases#latest).
 
-Okay! Let me say what's this about. This is an attempt to make an Irc Client using electron.
-
-The purpose is to share with friends. And thus, make it safe also.
-
-It's under "heavy" development. Tons of mistakes are made in hope I 'll learn from these!
-
-I am open to ideas.
+It's a simple client to use in order to speak to friends or groups in any IRC server around the globe.
 
 ## Install
 
+### General
 In general this is the way to get the latest version
 
 ```
@@ -24,3 +19,12 @@ cd irc-electron
 npm install
 npm start
 ```
+
+### Windows
+Download an archived precompiled binary from [here](https://github.com/kaotisk-hund/irc-electron/releases#latest).
+
+Unzip it wherever you like.
+
+Open the folder.
+
+Open irc-electron.exe
