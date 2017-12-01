@@ -1,38 +1,46 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en" dir="ltr">
-  <head>
-  	<title>KiRc</title>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/foundation.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-  </head>
+	<head>
+		<title>KiRc</title>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="assets/css/foundation.css">
+		<link rel="stylesheet" href="assets/css/app.css">
+	</head>
 <body>
-	<div class="grid-container">
-		<div class="grid-x">
-			<div class="small-9 cell">
+	<div id="main" class="grid-container">
+		<div id="top" class="grid-x">
+			<div id="title-i-guess" class="small-9 cell">
 				<h2>Messages</h2>
 			</div>
 			<div id="status" class="small-3 cell">
-				
+				<button id="status-button" class="button alert">Disconnected</button>
 			</div>
 		</div>
-			
-		<div class="small-12 cell">
-
-			<div class="messages" style="
+	</div>
+	<div class="grid-container">
+		<div class="grid-x">
+			<div class="small-12 cell messages" style="
 				max-height: 400px;
 				overflow: scroll;
 				height: 400px;
 			">
 			</div>
-			<div class="send">
-				<form id="messaging">
-					<input type="text" id="message" placeholder="Enter your message here...">
-					<button class="button" type="submit">Send</button>
-				</form>
-			</div>
+		</div>
+	</div>
+	<div class="grid-container">
+		<div class="send">
+			<form id="messaging">
+				<div class="grid-x">
+					<div class="small-9 cell">
+						<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
+					</div>
+					<div class="small-3 cell">
+						<button class="button" type="submit">Send</button>
+					</div>						
+				</div>
+			</form>
 		</div>
 	</div>
 
@@ -40,43 +48,44 @@
 		const electron = require('electron');
 		const {ipcRenderer} = electron;
 
-    	/*
-    	 * Sending messages
-    	 */
-    	document.querySelector('#messaging').addEventListener('submit', sendMessage);
-    	function sendMessage(e){
-    		e.preventDefault();
-    		message = document.querySelector('#message').value;
+		/*
+		 * Sending messages
+		 */
+		document.querySelector('#messaging').addEventListener('submit', sendMessage);
+		function sendMessage(e){
+			e.preventDefault();
+			message = document.querySelector('#message').value;
 
-    		ipcRenderer.send('irc_send', message);
+			ipcRenderer.send('irc_send', message);
 
-    		message.value = '';
-    	}
+			message = '';
+			document.querySelector('#message').value = '';
+		}
 
-	    /*
-	     * Messages handling
-	     */
-	    const div = document.querySelector('.messages');
-	    ipcRenderer.on('irc_message', function(e, data){
-	      const p = document.createElement('p');
-	      p.className = 'message';
-	      const message = document.createTextNode(data.from + ": " + data.message);
-	      p.appendChild(message);
-	      div.appendChild(p);
-	    });
+		/*
+		 * Messages handling
+		 */
+		const div = document.querySelector('.messages');
+		ipcRenderer.on('irc_message', function(e, data){
+			const p = document.createElement('pre');
+			p.className = 'message';
+			const message = document.createTextNode(data.from + ": " + data.message);
+			p.appendChild(message);
+			div.appendChild(p);
+		});
 
-	    /*
-	     * Connected show!
-	     */
-	    const status = document.querySelector('#status');
-	    ipcRenderer.on('irc_cded', function(e, data){
-	    	const button_cded = document.createElement('button');
-	    	button_cded.type = 'button'
-	    	button_cded.className = 'button success';
-	    	const cded_mess = document.createTextNode('Connected')
-	    	button_cded.appendChild(cded_mess);
-	    	status.appendChild(button_cded);
-	    });
+		/*
+		 * Connected show!
+		 * For now if you are connected once, it does change to connected.
+		 * TODO: Change back to disconnected when disconnected.
+		 */
+		const status = document.querySelector('#status');
+		ipcRenderer.on('irc_cded', function(e, data){
+			const button_dced = document.querySelector('#status-button');
+			button_dced.className = 'button success';
+			const cded_mess = 'Connected';
+			button_dced.innerHTML = cded_mess;
+		});
 		
 
 	</script>

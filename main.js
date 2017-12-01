@@ -16,17 +16,9 @@ const path = require('path')
 
 // Now, we are going to use node-irc for our project also.
 const irc = require('irc')
-// This is a temporary library just for learning how to make one.
-const irclient = require('./lib/irclient.js')
 
 // Set NODE_ENV to either 'production' or 'development'.
 process.env.NODE_ENV = 'development'
-
-/*
- * Test line for irclient (eg if successfully loaded)
- * Lesson learnt: Outputs the functions that this module exports
- */
-console.log(irclient)
 
 /*
  * Here I am setting some variables that I want to have
@@ -109,7 +101,7 @@ try {
 	 * Creates about window
 	 */
 	function aboutWindow(){
-		about = new BrowserWindow({width: 300, height: 330})
+		about = new BrowserWindow({width: 320, height: 200})
 
 		about.loadURL(url.format({
 			pathname: path.join(__dirname, 'about.html'),
@@ -148,44 +140,50 @@ try {
 
 	// Connect Function
 	function connect(e, thadata, client){
-	//win.webContents.send('irc:connect', thadata);
-	console.log(e)
-	server = thadata.server;
-	nickname = thadata.nickname;
-	channel = thadata.channel;
-	username = nickname+'_kirc';
-	realname = nickname+' at KiRc';
-	
-	console.log('=========	 Your login info	 =========')
-	console.log(server)
-	console.log(nickname)
-	console.log(channel)
+		//win.webContents.send('irc:connect', thadata);
+		//console.log(e)
+		server = thadata.server;
+		nickname = thadata.nickname;
+		channel = thadata.channel;
+		username = nickname+'_kirc';
+		realname = nickname+' at KiRc';
+		
+		//console.log('=========	 Your login info	 =========')
+		//console.log(server)
+		//console.log(nickname)
+		//console.log(channel)
 
 
-	console.log('.............')
+		//console.log('.............')
 
-	 if (client === null){
-	 	client = new irc.Client(server, nickname, {
-		channels: [
-			channel
-		],
-		userName: username,
-		realName: realname
-		});
-	 	
-		client.addListener('registered', function(mess){
-			console.log('CDed');
-			console.log('Nickname: ' + client.nick);
-			console.log(mess);
-			win.webContents.send('irc_cded');
-			client.join(channel);
-			setListeners(client);
-		})
-	 } else {
-	 	//client = null
-	 	console.log('Now client is not set null BUT nothing else happens :D')
-	 }
-	 console.log('.............')
+		if (client === null){
+			client = new irc.Client(server, nickname, {
+			channels: [
+				channel
+			],
+			userName: username,
+			realName: realname
+			});
+		 	
+			client.addListener('registered', function(mess){
+				//console.log('CDed');
+				//console.log('Nickname: ' + client.nick);
+				//console.log(mess);
+				win.webContents.send('irc_cded');
+				client.join(channel);
+				setListeners(client);
+			})
+			client.addListener('motd', function(motd){
+				data = {
+					from:'Message of the day',
+					message:motd
+				}
+				addMessageToBoard(data);
+			})
+		} else {
+			//console.log('Now client is not set null BUT nothing else happens :D')
+		}
+		//console.log('.............')
 	}
 
 	function disconnect(client){
@@ -196,23 +194,21 @@ try {
 	function setListeners(client){
 		client.addListener('message'+channel, function (from, message) {
 			data = {from, message};
-			// TODO add the function that adds the message
 			addMessageToBoard(data)
 		});
 
 		ipcMain.on('irc_send', function(e, data){
 			message = data;
 			if (client === null) {
-				console.log('wtf??? Maybe disconnected... Most likely.')
+			//	console.log('wtf??? Maybe disconnected... Most likely.')
 			} else {
-				console.log('Seems you are online... going to send that message...')
+			//	console.log('Seems you are online... going to send that message...')
 				client.say(channel,message)
 			}
 			from = nickname
 			data = {from, message};
-			// TODO add the function that adds the message
 			addMessageToBoard(data)
-			console.log(data)
+			//console.log(data)
 		})
 
 	}
@@ -221,7 +217,7 @@ try {
 	// Catch irc_connect
 	ipcMain.on('irc_connect', function(e, thedata){
 		client = connect(e, thedata, client)
-		console.log(client)
+		//console.log(client)
 		
 	});
 
@@ -299,16 +295,16 @@ const mainMenuTemplate =	[
 					settingsWindow();
 				}
 			},
-			{
+		/*	{
 				label:'Connect'
 			},
 			{
 				label:'Disconnect',
 					accelerator:process.platform == 'darwin' ? 'Command+D' : 'Ctrl+D',
 				click(){
-					disconnect(client);
+					disconnect();
 				}
-			}
+			}*/
 		]
 	},
 	{
