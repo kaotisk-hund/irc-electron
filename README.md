@@ -27,4 +27,10 @@ npm start
 ```
 
 ### Windows
-Download an archived precompiled binary from [[link](https://github.com/kaotisk-hund/irc-electron/releases#latest)]
+Download an archived precompiled binary from [here](https://github.com/kaotisk-hund/irc-electron/releases#latest).
+
+Unzip it wherever you like.
+
+Open the folder.
+
+Open irc-electron.exe
