@@ -16,6 +16,7 @@ I am open to ideas.
 
 ## Install
 
+### General
 In general this is the way to get the latest version
 
 ```
@@ -24,3 +25,6 @@ cd irc-electron
 npm install
 npm start
 ```
+
+### Windows
+Download an archived precompiled binary from [[link](https://github.com/kaotisk-hund/irc-electron/releases#latest)]
