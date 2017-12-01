@@ -101,7 +101,7 @@ try {
 	 * Creates about window
 	 */
 	function aboutWindow(){
-		about = new BrowserWindow({width: 300, height: 330})
+		about = new BrowserWindow({width: 320, height: 200})
 
 		about.loadURL(url.format({
 			pathname: path.join(__dirname, 'about.html'),
