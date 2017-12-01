@@ -4,7 +4,7 @@
 
 This is a multiplatform IRC client.
 
-Binaries coming in next releases (I guess v0.0.3) <- Okay, I did it from v0.0.2.
+Binaries availiable [here](https://github.com/kaotisk-hund/irc-electron/releases#latest).
 
 Okay! Let me say what's this about. This is an attempt to make an Irc Client using electron.
 
