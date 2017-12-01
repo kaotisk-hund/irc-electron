@@ -173,6 +173,13 @@ try {
 				client.join(channel);
 				setListeners(client);
 			})
+			client.addListener('motd', function(motd){
+				data = {
+					from:'Message of the day',
+					message:motd
+				}
+				addMessageToBoard(data);
+			})
 		} else {
 			console.log('Now client is not set null BUT nothing else happens :D')
 		}
