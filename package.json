@@ -23,6 +23,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "electron": "^1.7.9",
+    "fs": "0.0.1-security",
     "ipfs": "^0.26.0",
     "irc": "^0.5.2"
   },

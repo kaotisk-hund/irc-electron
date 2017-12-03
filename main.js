@@ -20,6 +20,9 @@ const irc = require('irc')
 // Added ipfs
 const ipfs = require('ipfs-api')
 
+// so we can read local files
+const fs = require('fs')
+
 // Set NODE_ENV to either 'production' or 'development'.
 process.env.NODE_ENV = 'development'
 
