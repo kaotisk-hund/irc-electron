@@ -17,6 +17,9 @@ const path = require('path')
 // Now, we are going to use node-irc for our project also.
 const irc = require('irc')
 
+// Added ipfs
+const ipfs = require('ipfs-api')
+
 // Set NODE_ENV to either 'production' or 'development'.
 process.env.NODE_ENV = 'development'
 
