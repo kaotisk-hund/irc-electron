@@ -142,6 +142,27 @@ try {
 		addMessageToBoard(data)
 	})
 	
+	// Initiator for IPFS
+	function ipfsinit(ipfs){
+		cl = ipfs('localhost',5001) // Just connect
+		console.log('IPFS connected')
+		// The following is the way of getting files to add them to ipfs (buffer type)
+		fs.readFile('/home/kaotisk/Music/methismena kswtika-orgh.mp3', function(err, data){
+			console.log('File read!')
+			cl.files.add(data, function(err, filesAdded){ // Test line for adding // TODO: get the ipfs hash back
+				file1 = filesAdded[0]
+				console.log('File uploaded')
+				console.log(file1.hash)
+				from = 'File shared'
+				message = 'The hash is '+file1.hash
+				data = {from,message}
+				addMessageToBoard(data)
+				console.log(data)
+			})
+		})
+		
+	}
+	
 
 
 	// Connect Function
@@ -270,12 +291,12 @@ const mainMenuTemplate =	[
 	{
 		label: 'File',
 		submenu:[
-		/*	 {
-				label:'Add Item',
+			{
+				label:'IPFS test',
 				click(){
-					createAddWindow();
+					ipfsinit(ipfs);
 				}
-			},
+			},/*
 			{
 				label:'Clear Items',
 				click(){
