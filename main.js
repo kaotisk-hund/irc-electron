@@ -135,6 +135,13 @@ try {
 		data = null;
 	}
 
+	/*
+	 * A function for sending files to mainWindow
+	 */
+	function addFileToBoard(data){
+		win.webContents.send('ipfs_file', data);
+		data = null;
+	}
 
 
 	// Add a message at channel listener
