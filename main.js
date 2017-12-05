@@ -307,12 +307,12 @@ const mainMenuTemplate =	[
 	{
 		label: 'File',
 		submenu:[
-			{
+			/*{
 				label:'IPFS test',
 				click(){
 					ipfsinit(ipfs);
 				}
-			},/*
+			},
 			{
 				label:'Clear Items',
 				click(){
