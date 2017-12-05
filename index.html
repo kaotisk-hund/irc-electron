@@ -37,8 +37,17 @@
 						<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
 					</div>
 					<div class="small-3 cell">
-						<button class="button" type="submit">Send</button>
-					</div>						
+						<button id="message_send" class="button" type="submit">Send</button>
+					</div>
+				</div>
+			</form>
+			<form id="sharing" method="post" enctype="multipart/form-data">
+				<div>
+					<label for="file">Choose file to upload</label>
+					<input type="file" id="file" name="file">
+				</div>
+				<div>
+					<button id="file_upload" class="button">Share!</button>
 				</div>
 			</form>
 		</div>
