@@ -78,7 +78,7 @@
 		function sendFile(e){
 			e.preventDefault();
 			file = document.querySelector('#file').files[0];
-			ipcRenderer.send('ipfs_upload', file);
+			ipcRenderer.send('ipfs_upload', file.path, file.name);
 			file = '';
 			//document.querySelector('#message').value = '';
 		}

@@ -150,18 +150,20 @@ try {
 	})
 	
 	// Initiator for IPFS
-	function ipfsinit(ipfs, file){
+	function ipfsinit(client, ipfs, file, name){
 		cl = ipfs('localhost',5001) // Just connect
 		console.log('IPFS connected')
 		// The following is the way of getting files to add them to ipfs (buffer type)
-		fs.readFile(file.path, function(err, data){
+		fs.readFile(file, function(err, data){
 			console.log('File read!')
 			cl.files.add(data, function(err, filesAdded){ // Test line for adding // TODO: get the ipfs hash back
 				file1 = filesAdded[0]
 				console.log('File uploaded')
-				file = 'methismena kswtika-orgh.mp3'
+				file = name
 				hash = '/ipfs/' + file1.hash;
 				data = {file, hash}
+				mdata = name + ' -> ' + hash
+				client.say(channel, mdata)
 				addFileToBoard(data)
 			})
 		})
@@ -244,14 +246,15 @@ try {
 			//console.log(data)
 		})
 
-		ipcMain.on('ipfs_upload', function(e, dfile){
+		ipcMain.on('ipfs_upload', function(e, dfile, dname){
 			console.log(dfile)
 			file = dfile
+			name = dname
 			if (client === null) {
 				console.log('Tried for client... none found')
 			} else {
 				console.log('Seems okay... going to send that file...')
-				ipfsinit(ipfs, file)
+				ipfsinit(client, ipfs, file, name)
 			}
 			//console.log(data)
 		})
