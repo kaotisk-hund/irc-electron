@@ -72,6 +72,18 @@
 		}
 
 		/*
+		 * Sending files
+		 */
+		document.querySelector('#sharing').addEventListener('submit', sendFile);
+		function sendFile(e){
+			e.preventDefault();
+			file = document.querySelector('#file').files[0];
+			ipcRenderer.send('ipfs_upload', file);
+			file = '';
+			//document.querySelector('#message').value = '';
+		}
+
+		/*
 		 * Messages handling
 		 */
 		const div = document.querySelector('.messages');
