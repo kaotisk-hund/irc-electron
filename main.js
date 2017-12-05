@@ -243,7 +243,6 @@ try {
 			from = nickname
 			data = {from, message};
 			addMessageToBoard(data)
-			//console.log(data)
 		})
 
 		ipcMain.on('ipfs_upload', function(e, dfile, dname){
@@ -256,7 +255,6 @@ try {
 				console.log('Seems okay... going to send that file...')
 				ipfsinit(client, ipfs, file, name)
 			}
-			//console.log(data)
 		})
 	}
 
@@ -264,8 +262,6 @@ try {
 	// Catch irc_connect
 	ipcMain.on('irc_connect', function(e, thedata){
 		client = connect(e, thedata, client)
-		//console.log(client)
-		
 	});
 
 
