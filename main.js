@@ -245,6 +245,21 @@ try {
 			//console.log(data)
 		})
 
+		ipcMain.on('ipfs_upload', function(e, dfile){
+			console.log(dfile)
+			file = dfile
+			if (client === null) {
+				console.log('Tried for client... none found')
+			} else {
+				console.log('Seems okay... going to send that file...')
+				ipfsinit(ipfs, file)
+				client.say(channel,data)
+			}
+			
+			
+			addFileToBoard(data)
+			//console.log(data)
+		})
 	}
 
 
