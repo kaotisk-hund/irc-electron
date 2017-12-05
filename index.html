@@ -96,6 +96,18 @@
 		});
 
 		/*
+		 * Files handling
+		 */
+		//const div = document.querySelector('.messages');
+		ipcRenderer.on('ipfs_file', function(e, data){
+			const p = document.createElement('p');
+			p.className = 'file';
+			const file_des = document.createTextNode(data.file + " -> " + data.hash);
+			p.appendChild(file_des);
+			div.appendChild(p);
+		});
+
+		/*
 		 * Connected show!
 		 * For now if you are connected once, it does change to connected.
 		 * TODO: Change back to disconnected when disconnected.
