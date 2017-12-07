@@ -24,7 +24,7 @@ const ipfs = require("ipfs-api");
 const fs = require("fs");
 
 // Set NODE_ENV to either "production" or "development".
-process.env.NODE_ENV = "development"
+process.env.NODE_ENV = "development";
 
 /*
  * Here I am setting some variables that I want to have
@@ -33,266 +33,254 @@ process.env.NODE_ENV = "development"
  * client variable is set to null so that we know that
  * when the program starts
  */
-let server
-let nickname
-let client = null
-let channel
-let message
-let win
+let server;
+let nickname;
+let client = null;
+let channel;
+let message;
+let win;
 
 
 /*
- * I thought it would be nice to use try and catch for
- * this project and also learn it better this way
+ * This is the section where 2 windows are set.
+ * mainWindow() and settingsWindow().
  */
-try {
 
-	/*
-	 * This is the section where 2 windows are set.
-	 * mainWindow() and settingsWindow().
-	 */
+/*
+ * Creates the main window!!!
+ */
+function mainWindow () {
+	// Create the browser window.
+	win = new BrowserWindow({width: 800, height: 600});
+	
+	// and load the index.html of the app.
+	win.loadURL(url.format({
+		pathname: path.join(__dirname, "index.html"),
+		protocol: "file:",
+		slashes: true
+	}));
 
-	/*
-	 * Creates the main window!!!
-	 */
-	function mainWindow () {
-		// Create the browser window.
-		win = new BrowserWindow({width: 800, height: 600})
-		
-		// and load the index.html of the app.
-		win.loadURL(url.format({
-			pathname: path.join(__dirname, "index.html"),
-			protocol: "file:",
-			slashes: true
-		}))
+	// Open the DevTools.
+	// win.webContents.openDevTools() // Temporarily commented out, as we have the option from the menu.
 
-		// Open the DevTools.
-		// win.webContents.openDevTools() // Temporarily commented out, as we have the option from the menu.
+	// Emitted when the window is closed.
+	win.on("closed", () => {
+		// Dereference the window object, usually you would store windows
+		// in an array if your app supports multi windows, this is the time
+		// when you should delete the corresponding element.
+		win = null;		// Empty the win variable
+		app.quit();		//Quit the application
+	});
 
-		// Emitted when the window is closed.
-		win.on("closed", () => {
+	// Build menu from template
+	const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+	// Insert menu
+	Menu.setApplicationMenu(mainMenu);
+	// return win; // Might be useless
+}
+
+/*
+ * Creates settings window
+ */
+function settingsWindow(){
+	setWin = new BrowserWindow({width: 300, height: 350});
+
+	setWin.loadURL(url.format({
+		pathname: path.join(__dirname, "settings.html"),
+		protocol: "file:",
+		slashes: true
+	}));
+	setWin.on("closed", () => {
 			// Dereference the window object, usually you would store windows
 			// in an array if your app supports multi windows, this is the time
 			// when you should delete the corresponding element.
-			win = null		// Empty the win variable
-			app.quit();		//Quit the application
-		})
+			setWin = null;
+	});
+}
+/*
+ * Creates about window
+ */
+function aboutWindow(){
+	about = new BrowserWindow({width: 320, height: 200});
 
-		// Build menu from template
-		const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-		// Insert menu
-		Menu.setApplicationMenu(mainMenu);
-		// return win; // Might be useless
-	}
-
-	/*
-	 * Creates settings window
-	 */
-	function settingsWindow(){
-		setWin = new BrowserWindow({width: 300, height: 350})
-
-		setWin.loadURL(url.format({
-			pathname: path.join(__dirname, "settings.html"),
-			protocol: "file:",
-			slashes: true
-		}))
-		setWin.on("closed", () => {
-				// Dereference the window object, usually you would store windows
-				// in an array if your app supports multi windows, this is the time
-				// when you should delete the corresponding element.
-				setWin = null
-		})
-	}
-	/*
-	 * Creates about window
-	 */
-	function aboutWindow(){
-		about = new BrowserWindow({width: 320, height: 200})
-
-		about.loadURL(url.format({
-			pathname: path.join(__dirname, "about.html"),
-			protocol: "file:",
-			slashes: true
-		}))
-		about.on("closed", () => {
-				// Dereference the window object, usually you would store windows
-				// in an array if your app supports multi windows, this is the time
-				// when you should delete the corresponding element.
-				about = null
-		})
-	}
+	about.loadURL(url.format({
+		pathname: path.join(__dirname, "about.html"),
+		protocol: "file:",
+		slashes: true
+	}));
+	about.on("closed", () => {
+			// Dereference the window object, usually you would store windows
+			// in an array if your app supports multi windows, this is the time
+			// when you should delete the corresponding element.
+			about = null;
+	});
+}
 
 
 
 
 
-	// SOME OTHER PART OF THE PROGRAM
-	/*
-	 * A function for sending messages to mainWindow
-	 */
-	function addMessageToBoard(data){
-		win.webContents.send("irc_message", data);
-		data = null;
-	}
+// SOME OTHER PART OF THE PROGRAM
+/*
+ * A function for sending messages to mainWindow
+ */
+function addMessageToBoard(data){
+	win.webContents.send("irc_message", data);
+	data = null;
+}
 
-	/*
-	 * A function for sending files to mainWindow
-	 */
-	function addFileToBoard(data){
-		win.webContents.send("ipfs_file", data);
-		data = null;
-	}
-
-
-	// Add a message at channel listener
-	ipcMain.on("sig", function(e,data){
-		addMessageToBoard(data)
-	})
-	
-	// Initiator for IPFS
-	function ipfsinit(client, ipfs, file, name){
-		cl = ipfs("localhost",5001) // Just connect
-		console.log("IPFS connected")
-		// The following is the way of getting files to add them to ipfs (buffer type)
-		fs.readFile(file, function(err, data){
-			console.log("File read!")
-			cl.files.add(data, function(err, filesAdded){ // Test line for adding // TODO: get the ipfs hash back
-				file1 = filesAdded[0]
-				console.log("File uploaded")
-				file = name
-				hash = "/ipfs/" + file1.hash;
-				data = {file, hash}
-				mdata = name + " -> " + hash
-				client.say(channel, mdata)
-				addFileToBoard(data)
-			})
-		})
-
-		
-	}
-	
+/*
+ * A function for sending files to mainWindow
+ */
+function addFileToBoard(data){
+	win.webContents.send("ipfs_file", data);
+	data = null;
+}
 
 
-	// Connect Function
-	function connect(e, thadata, client){
-		//win.webContents.send("irc:connect", thadata);
-		//console.log(e)
-		server = thadata.server;
-		nickname = thadata.nickname;
-		channel = thadata.channel;
-		username = nickname+"_kirc";
-		realname = nickname+" at KiRc";
-		
-		//console.log("=========	 Your login info	 =========")
-		//console.log(server)
-		//console.log(nickname)
-		//console.log(channel)
+// Add a message at channel listener
+ipcMain.on("sig", function(e,data){
+	addMessageToBoard(data);
+});
 
-
-		//console.log(".............")
-
-		if (client === null){
-			client = new irc.Client(server, nickname, {
-			channels: [
-				channel
-			],
-			userName: username,
-			realName: realname
-			});
-		 	
-			client.addListener("registered", function(mess){
-				//console.log("CDed");
-				//console.log("Nickname: " + client.nick);
-				//console.log(mess);
-				win.webContents.send("irc_cded");
-				client.join(channel);
-				setListeners(client);
-			})
-			client.addListener("motd", function(motd){
-				data = {
-					from:"Message of the day",
-					message:motd
-				}
-				addMessageToBoard(data);
-			})
-		} else {
-			//console.log("Now client is not set null BUT nothing else happens :D")
-		}
-		//console.log(".............")
-	}
-
-	function disconnect(client){
-		client.disconnect();
-		client = null;
-	}
-
-	function setListeners(client){
-		client.addListener("message"+channel, function (from, message) {
-			data = {from, message};
-			addMessageToBoard(data)
+// Initiator for IPFS
+function ipfsinit(client, ipfs, file, name){
+	cl = ipfs("localhost",5001); // Just connect
+	console.log("IPFS connected");
+	// The following is the way of getting files to add them to ipfs (buffer type)
+	fs.readFile(file, function(err, data){
+		console.log("File read!");
+		cl.files.add(data, function(err, filesAdded){ // Test line for adding // TODO: get the ipfs hash back
+			file1 = filesAdded[0];
+			console.log("File uploaded");
+			file = name;
+			hash = "/ipfs/" + file1.hash;
+			data = {file, hash};
+			mdata = name + " -> " + hash;
+			client.say(channel, mdata);
+			addFileToBoard(data);
 		});
-
-		ipcMain.on("irc_send", function(e, data){
-			message = data;
-			if (client === null) {
-			//	console.log("wtf??? Maybe disconnected... Most likely.")
-			} else {
-			//	console.log("Seems you are online... going to send that message...")
-				client.say(channel,message)
-			}
-			from = nickname
-			data = {from, message};
-			addMessageToBoard(data)
-		})
-
-		ipcMain.on("ipfs_upload", function(e, dfile, dname){
-			console.log(dfile)
-			file = dfile
-			name = dname
-			if (client === null) {
-				console.log("Tried for client... none found")
-			} else {
-				console.log("Seems okay... going to send that file...")
-				ipfsinit(client, ipfs, file, name)
-			}
-		})
-	}
-
-
-	// Catch irc_connect
-	ipcMain.on("irc_connect", function(e, thedata){
-		client = connect(e, thedata, client)
 	});
 
-
-
-	// This method will be called when Electron has finished
-	// initialization and is ready to create browser windows.
-	// Some APIs can only be used after this event occurs.
-	app.on("ready", mainWindow)
-
-	// Quit when all windows are closed.
-	app.on("window-all-closed", () => {
-		// On macOS it is common for applications and their menu bar
-		// to stay active until the user quits explicitly with Cmd + Q
-		if (process.platform !== "darwin") {
-			app.quit()
-		}
-	})
-
-	app.on("activate", () => {
-		// On macOS it"s common to re-create a window in the app when the
-		// dock icon is clicked and there are no other windows open.
-		if (win === null) {
-			mainWindow()
-		}
-	})
-
-	// In this file you can include the rest of your app's specific main process
-	// code. You can also put them in separate files and require them here.
-} catch (e){
-	console.log(e.message);
+	
 }
+
+
+
+// Connect Function
+function connect(e, thadata, client){
+	//win.webContents.send("irc:connect", thadata);
+	//console.log(e)
+	server = thadata.server;
+	nickname = thadata.nickname;
+	channel = thadata.channel;
+	username = nickname+"_kirc";
+	realname = nickname+" at KiRc";
+	
+	//console.log("=========	 Your login info	 =========")
+	//console.log(server)
+	//console.log(nickname)
+	//console.log(channel)
+
+
+	//console.log(".............")
+
+	if (client === null){
+		client = new irc.Client(server, nickname, {
+		channels: [
+			channel
+		],
+		userName: username,
+		realName: realname
+		});
+	 	
+		client.addListener("registered", function(mess){
+			//console.log("CDed");
+			//console.log("Nickname: " + client.nick);
+			//console.log(mess);
+			win.webContents.send("irc_cded");
+			client.join(channel);
+			setListeners(client);
+		});
+		client.addListener("motd", function(motd){
+			data = {
+				from:"Message of the day",
+				message:motd
+			};
+			addMessageToBoard(data);
+		})
+	} else {
+		//console.log("Now client is not set null BUT nothing else happens :D")
+	}
+	//console.log(".............")
+}
+
+function disconnect(client){
+	client.disconnect();
+	client = null;
+}
+
+function setListeners(client){
+	client.addListener("message"+channel, function (from, message) {
+		data = {from, message};
+		addMessageToBoard(data);
+	});
+
+	ipcMain.on("irc_send", function(e, data){
+		message = data;
+		if (client === null) {
+		//	console.log("wtf??? Maybe disconnected... Most likely.")
+		} else {
+		//	console.log("Seems you are online... going to send that message...")
+			client.say(channel,message);
+		}
+		from = nickname;
+		data = {from, message};
+		addMessageToBoard(data);
+	})
+
+	ipcMain.on("ipfs_upload", function(e, dfile, dname){
+		console.log(dfile);
+		file = dfile;
+		name = dname;
+		if (client === null) {
+			console.log("Tried for client... none found");
+		} else {
+			console.log("Seems okay... going to send that file...");
+			ipfsinit(client, ipfs, file, name);
+		}
+	});
+}
+
+
+// Catch irc_connect
+ipcMain.on("irc_connect", function(e, thedata){
+	client = connect(e, thedata, client);
+});
+
+
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on("ready", mainWindow);
+
+// Quit when all windows are closed.
+app.on("window-all-closed", () => {
+	// On macOS it is common for applications and their menu bar
+	// to stay active until the user quits explicitly with Cmd + Q
+	if (process.platform !== "darwin") {
+		app.quit();
+	}
+});
+
+app.on("activate", () => {
+	// On macOS it"s common to re-create a window in the app when the
+	// dock icon is clicked and there are no other windows open.
+	if (win === null) {
+		mainWindow();
+	}
+});
 
 
 /*
