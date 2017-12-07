@@ -8,23 +8,23 @@
  */
 
 // Getting 4 basic elements of electron into place
-const {app, BrowserWindow, ipcMain, Menu} = require('electron')
+const {app, BrowserWindow, ipcMain, Menu} = require("electron");
 // Required so we can load urls
-const url = require('url')
+const url = require("url");
 // ... and paths
-const path = require('path')
+const path = require("path");
 
 // Now, we are going to use node-irc for our project also.
-const irc = require('irc')
+const irc = require("irc");
 
 // Added ipfs
-const ipfs = require('ipfs-api')
+const ipfs = require("ipfs-api");
 
 // so we can read local files
-const fs = require('fs')
+const fs = require("fs");
 
-// Set NODE_ENV to either 'production' or 'development'.
-process.env.NODE_ENV = 'development'
+// Set NODE_ENV to either "production" or "development".
+process.env.NODE_ENV = "development"
 
 /*
  * Here I am setting some variables that I want to have
@@ -61,8 +61,8 @@ try {
 		
 		// and load the index.html of the app.
 		win.loadURL(url.format({
-			pathname: path.join(__dirname, 'index.html'),
-			protocol: 'file:',
+			pathname: path.join(__dirname, "index.html"),
+			protocol: "file:",
 			slashes: true
 		}))
 
@@ -70,7 +70,7 @@ try {
 		// win.webContents.openDevTools() // Temporarily commented out, as we have the option from the menu.
 
 		// Emitted when the window is closed.
-		win.on('closed', () => {
+		win.on("closed", () => {
 			// Dereference the window object, usually you would store windows
 			// in an array if your app supports multi windows, this is the time
 			// when you should delete the corresponding element.
@@ -92,11 +92,11 @@ try {
 		setWin = new BrowserWindow({width: 300, height: 350})
 
 		setWin.loadURL(url.format({
-			pathname: path.join(__dirname, 'settings.html'),
-			protocol: 'file:',
+			pathname: path.join(__dirname, "settings.html"),
+			protocol: "file:",
 			slashes: true
 		}))
-		setWin.on('closed', () => {
+		setWin.on("closed", () => {
 				// Dereference the window object, usually you would store windows
 				// in an array if your app supports multi windows, this is the time
 				// when you should delete the corresponding element.
@@ -110,11 +110,11 @@ try {
 		about = new BrowserWindow({width: 320, height: 200})
 
 		about.loadURL(url.format({
-			pathname: path.join(__dirname, 'about.html'),
-			protocol: 'file:',
+			pathname: path.join(__dirname, "about.html"),
+			protocol: "file:",
 			slashes: true
 		}))
-		about.on('closed', () => {
+		about.on("closed", () => {
 				// Dereference the window object, usually you would store windows
 				// in an array if your app supports multi windows, this is the time
 				// when you should delete the corresponding element.
@@ -131,7 +131,7 @@ try {
 	 * A function for sending messages to mainWindow
 	 */
 	function addMessageToBoard(data){
-		win.webContents.send('irc_message', data);
+		win.webContents.send("irc_message", data);
 		data = null;
 	}
 
@@ -139,30 +139,30 @@ try {
 	 * A function for sending files to mainWindow
 	 */
 	function addFileToBoard(data){
-		win.webContents.send('ipfs_file', data);
+		win.webContents.send("ipfs_file", data);
 		data = null;
 	}
 
 
 	// Add a message at channel listener
-	ipcMain.on('sig', function(e,data){
+	ipcMain.on("sig", function(e,data){
 		addMessageToBoard(data)
 	})
 	
 	// Initiator for IPFS
 	function ipfsinit(client, ipfs, file, name){
-		cl = ipfs('localhost',5001) // Just connect
-		console.log('IPFS connected')
+		cl = ipfs("localhost",5001) // Just connect
+		console.log("IPFS connected")
 		// The following is the way of getting files to add them to ipfs (buffer type)
 		fs.readFile(file, function(err, data){
-			console.log('File read!')
+			console.log("File read!")
 			cl.files.add(data, function(err, filesAdded){ // Test line for adding // TODO: get the ipfs hash back
 				file1 = filesAdded[0]
-				console.log('File uploaded')
+				console.log("File uploaded")
 				file = name
-				hash = '/ipfs/' + file1.hash;
+				hash = "/ipfs/" + file1.hash;
 				data = {file, hash}
-				mdata = name + ' -> ' + hash
+				mdata = name + " -> " + hash
 				client.say(channel, mdata)
 				addFileToBoard(data)
 			})
@@ -175,21 +175,21 @@ try {
 
 	// Connect Function
 	function connect(e, thadata, client){
-		//win.webContents.send('irc:connect', thadata);
+		//win.webContents.send("irc:connect", thadata);
 		//console.log(e)
 		server = thadata.server;
 		nickname = thadata.nickname;
 		channel = thadata.channel;
-		username = nickname+'_kirc';
-		realname = nickname+' at KiRc';
+		username = nickname+"_kirc";
+		realname = nickname+" at KiRc";
 		
-		//console.log('=========	 Your login info	 =========')
+		//console.log("=========	 Your login info	 =========")
 		//console.log(server)
 		//console.log(nickname)
 		//console.log(channel)
 
 
-		//console.log('.............')
+		//console.log(".............")
 
 		if (client === null){
 			client = new irc.Client(server, nickname, {
@@ -200,25 +200,25 @@ try {
 			realName: realname
 			});
 		 	
-			client.addListener('registered', function(mess){
-				//console.log('CDed');
-				//console.log('Nickname: ' + client.nick);
+			client.addListener("registered", function(mess){
+				//console.log("CDed");
+				//console.log("Nickname: " + client.nick);
 				//console.log(mess);
-				win.webContents.send('irc_cded');
+				win.webContents.send("irc_cded");
 				client.join(channel);
 				setListeners(client);
 			})
-			client.addListener('motd', function(motd){
+			client.addListener("motd", function(motd){
 				data = {
-					from:'Message of the day',
+					from:"Message of the day",
 					message:motd
 				}
 				addMessageToBoard(data);
 			})
 		} else {
-			//console.log('Now client is not set null BUT nothing else happens :D')
+			//console.log("Now client is not set null BUT nothing else happens :D")
 		}
-		//console.log('.............')
+		//console.log(".............")
 	}
 
 	function disconnect(client){
@@ -227,17 +227,17 @@ try {
 	}
 
 	function setListeners(client){
-		client.addListener('message'+channel, function (from, message) {
+		client.addListener("message"+channel, function (from, message) {
 			data = {from, message};
 			addMessageToBoard(data)
 		});
 
-		ipcMain.on('irc_send', function(e, data){
+		ipcMain.on("irc_send", function(e, data){
 			message = data;
 			if (client === null) {
-			//	console.log('wtf??? Maybe disconnected... Most likely.')
+			//	console.log("wtf??? Maybe disconnected... Most likely.")
 			} else {
-			//	console.log('Seems you are online... going to send that message...')
+			//	console.log("Seems you are online... going to send that message...")
 				client.say(channel,message)
 			}
 			from = nickname
@@ -245,14 +245,14 @@ try {
 			addMessageToBoard(data)
 		})
 
-		ipcMain.on('ipfs_upload', function(e, dfile, dname){
+		ipcMain.on("ipfs_upload", function(e, dfile, dname){
 			console.log(dfile)
 			file = dfile
 			name = dname
 			if (client === null) {
-				console.log('Tried for client... none found')
+				console.log("Tried for client... none found")
 			} else {
-				console.log('Seems okay... going to send that file...')
+				console.log("Seems okay... going to send that file...")
 				ipfsinit(client, ipfs, file, name)
 			}
 		})
@@ -260,7 +260,7 @@ try {
 
 
 	// Catch irc_connect
-	ipcMain.on('irc_connect', function(e, thedata){
+	ipcMain.on("irc_connect", function(e, thedata){
 		client = connect(e, thedata, client)
 	});
 
@@ -269,19 +269,19 @@ try {
 	// This method will be called when Electron has finished
 	// initialization and is ready to create browser windows.
 	// Some APIs can only be used after this event occurs.
-	app.on('ready', mainWindow)
+	app.on("ready", mainWindow)
 
 	// Quit when all windows are closed.
-	app.on('window-all-closed', () => {
+	app.on("window-all-closed", () => {
 		// On macOS it is common for applications and their menu bar
 		// to stay active until the user quits explicitly with Cmd + Q
-		if (process.platform !== 'darwin') {
+		if (process.platform !== "darwin") {
 			app.quit()
 		}
 	})
 
-	app.on('activate', () => {
-		// On macOS it's common to re-create a window in the app when the
+	app.on("activate", () => {
+		// On macOS it"s common to re-create a window in the app when the
 		// dock icon is clicked and there are no other windows open.
 		if (win === null) {
 			mainWindow()
@@ -305,23 +305,23 @@ try {
 const mainMenuTemplate =	[
 	// Each object is a dropdown
 	{
-		label: 'File',
+		label: "File",
 		submenu:[
 			/*{
-				label:'IPFS test',
+				label:"IPFS test",
 				click(){
 					ipfsinit(ipfs);
 				}
 			},
 			{
-				label:'Clear Items',
+				label:"Clear Items",
 				click(){
-					mainWindow.webContents.send('item:clear');
+					mainWindow.webContents.send("item:clear");
 				}
 			},*/
 			{
-				label: 'Quit',
-				accelerator:process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+				label: "Quit",
+				accelerator:process.platform == "darwin" ? "Command+Q" : "Ctrl+Q",
 				click(){
 					app.quit();
 				}
@@ -329,21 +329,21 @@ const mainMenuTemplate =	[
 		]
 	},
 	{
-		label: 'Options',
+		label: "Options",
 		submenu:[
 			{
-				label:'Connection settings',
-					accelerator:process.platform == 'darwin' ? 'Command+S' : 'Ctrl+S',
+				label:"Connection settings",
+					accelerator:process.platform == "darwin" ? "Command+S" : "Ctrl+S",
 				click(){
 					settingsWindow();
 				}
 			},
 		/*	{
-				label:'Connect'
+				label:"Connect"
 			},
 			{
-				label:'Disconnect',
-					accelerator:process.platform == 'darwin' ? 'Command+D' : 'Ctrl+D',
+				label:"Disconnect",
+					accelerator:process.platform == "darwin" ? "Command+D" : "Ctrl+D",
 				click(){
 					disconnect();
 				}
@@ -351,10 +351,10 @@ const mainMenuTemplate =	[
 		]
 	},
 	{
-		label: 'Help',
+		label: "Help",
 		submenu:[
 			{
-				label: 'About',
+				label: "About",
 				click(){
 					aboutWindow();
 				}
@@ -364,21 +364,21 @@ const mainMenuTemplate =	[
 ];
 
 // If OSX, add empty object to menu
-if(process.platform == 'darwin'){
+if(process.platform == "darwin"){
 	mainMenuTemplate.unshift({});
 }
 
 // Add developer tools option if in dev
-if(process.env.NODE_ENV !== 'production'){
+if(process.env.NODE_ENV !== "production"){
 	mainMenuTemplate.push({
-		label: 'Developer Tools',
+		label: "Developer Tools",
 		submenu:[
 			{
-				role: 'reload'
+				role: "reload"
 			},
 			{
-				label: 'Toggle DevTools',
-				accelerator:process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+				label: "Toggle DevTools",
+				accelerator:process.platform == "darwin" ? "Command+I" : "Ctrl+I",
 				click(item, focusedWindow){
 					focusedWindow.toggleDevTools();
 				}
