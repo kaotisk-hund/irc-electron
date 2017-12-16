@@ -37,8 +37,17 @@
 						<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
 					</div>
 					<div class="small-3 cell">
-						<button class="button" type="submit">Send</button>
-					</div>						
+						<button id="message_send" class="button" type="submit">Send</button>
+					</div>
+				</div>
+			</form>
+			<form id="sharing" method="post" enctype="multipart/form-data">
+				<div>
+					<label for="file">Choose file to upload</label>
+					<input type="file" id="file" name="file">
+				</div>
+				<div>
+					<button id="file_upload" class="button">Share!</button>
 				</div>
 			</form>
 		</div>
@@ -63,6 +72,18 @@
 		}
 
 		/*
+		 * Sending files
+		 */
+		document.querySelector('#sharing').addEventListener('submit', sendFile);
+		function sendFile(e){
+			e.preventDefault();
+			file = document.querySelector('#file').files[0];
+			ipcRenderer.send('ipfs_upload', file.path, file.name);
+			file = '';
+			//document.querySelector('#message').value = '';
+		}
+
+		/*
 		 * Messages handling
 		 */
 		const div = document.querySelector('.messages');
@@ -71,6 +92,18 @@
 			p.className = 'message';
 			const message = document.createTextNode(data.from + ": " + data.message);
 			p.appendChild(message);
+			div.appendChild(p);
+		});
+
+		/*
+		 * Files handling
+		 */
+		//const div = document.querySelector('.messages');
+		ipcRenderer.on('ipfs_file', function(e, data){
+			const p = document.createElement('p');
+			p.className = 'file';
+			const file_des = document.createTextNode(data.file + " -> " + data.hash);
+			p.appendChild(file_des);
 			div.appendChild(p);
 		});
 
