@@ -36,6 +36,7 @@ process.env.NODE_ENV = "development";
 let server;
 let nickname;
 let username;
+let realname;
 let client = null;
 let channel;
 let message;
@@ -247,12 +248,12 @@ function ipfsinit(client, ipfs, file, name){
 	//console.log("IPFS connected");
 	// The following is the way of getting files to add them to ipfs (buffer type)
 	fs.readFile(file, function(err, data){
-		console.log("File read!");
+		//console.log("File read!");
 		cl.files.add(data, function(err, filesAdded){ // Test line for adding
-			file1 = filesAdded[0];
-			console.log("File uploaded");
+			var file1 = filesAdded[0];
+			//console.log("File uploaded");
 			file = name;
-			hash = "/ipfs/" + file1.hash;
+			var hash = "/ipfs/" + file1.hash;
 			data = {file, hash};
 			mdata = name + " -> " + hash;
 			client.say(channel, mdata);
@@ -280,20 +281,20 @@ function setListeners(client){
 		//	console.log("Seems you are online... going to send that message...")
 			client.say(channel,message);
 		}
-		from = nickname;
-		data = {from, message};
+		var from = nickname;
+		var data = {from, message};
 		addMessageToBoard(data);
-	})
+	});
 
 	// For uploading files
 	ipcMain.on("ipfs_upload", function(e, dfile, dname){
-		console.log(dfile);
-		file = dfile;
+		//console.log(dfile);
+		var file = dfile;
 		name = dname;
 		if (client === null) {
-			console.log("Tried for client... none found");
+			//console.log("Tried for client... none found");
 		} else {
-			console.log("Seems okay... going to send that file...");
+			//console.log("Seems okay... going to send that file...");
 			ipfsinit(client, ipfs, file, name);
 		}
 	});
