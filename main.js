@@ -282,7 +282,7 @@ function setListeners(client){
 			client.say(channel,message);
 		}
 		var from = nickname;
-		var data = {from, message};
+		data = {from, message};
 		addMessageToBoard(data);
 	});
 
@@ -341,7 +341,7 @@ function connect(e, thadata, client){
 				message:motd
 			};
 			addMessageToBoard(data);
-		})
+		});
 	} else {
 		//console.log("Now client is not set null BUT nothing else happens :D")
 	}
