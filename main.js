@@ -45,6 +45,99 @@ let about;
 let data;
 let hash;
 let mdata;
+let cl;
+
+/*
+ * This is the part of the program that creates
+ * the main menu.
+ *
+ */
+
+// Create menu template
+const mainMenuTemplate =	[
+	// Each object is a dropdown
+	{
+		label: "File",
+		submenu:[
+			/*{
+				label:"IPFS test",
+				click(){
+					ipfsinit(ipfs);
+				}
+			},
+			{
+				label:"Clear Items",
+				click(){
+					mainWindow.webContents.send("item:clear");
+				}
+			},*/
+			{
+				label: "Quit",
+				accelerator:process.platform === "darwin" ? "Command+Q" : "Ctrl+Q",
+				click(){
+					app.quit();
+				}
+			}
+		]
+	},
+	{
+		label: "Options",
+		submenu:[
+			{
+				label:"Connection settings",
+					accelerator:process.platform === "darwin" ? "Command+S" : "Ctrl+S",
+				click(){
+					settingsWindow();
+				}
+			},
+		/*	{
+				label:"Connect"
+			},
+			{
+				label:"Disconnect",
+					accelerator:process.platform == "darwin" ? "Command+D" : "Ctrl+D",
+				click(){
+					disconnect();
+				}
+			}*/
+		]
+	},
+	{
+		label: "Help",
+		submenu:[
+			{
+				label: "About",
+				click(){
+					aboutWindow();
+				}
+			}
+		]
+	}
+];
+
+// If OSX, add empty object to menu
+if(process.platform === "darwin"){
+	mainMenuTemplate.unshift({});
+}
+
+// Add developer tools option if in dev
+if(process.env.NODE_ENV !== "production"){
+	mainMenuTemplate.push({
+		label: "Developer Tools",
+		submenu:[
+			{
+				role: "reload"
+			},
+			{
+				label: "Toggle DevTools",
+				accelerator:process.platform === "darwin" ? "Command+I" : "Ctrl+I",
+				click(item, focusedWindow){
+					focusedWindow.toggleDevTools();
+				}
+			}
+		]
+	});
+}
 
 
 /*
@@ -292,94 +385,3 @@ app.on("activate", () => {
 });
 
 
-/*
- * This is the part of the program that creates
- * the main menu.
- *
- */
-
-// Create menu template
-const mainMenuTemplate =	[
-	// Each object is a dropdown
-	{
-		label: "File",
-		submenu:[
-			/*{
-				label:"IPFS test",
-				click(){
-					ipfsinit(ipfs);
-				}
-			},
-			{
-				label:"Clear Items",
-				click(){
-					mainWindow.webContents.send("item:clear");
-				}
-			},*/
-			{
-				label: "Quit",
-				accelerator:process.platform == "darwin" ? "Command+Q" : "Ctrl+Q",
-				click(){
-					app.quit();
-				}
-			}
-		]
-	},
-	{
-		label: "Options",
-		submenu:[
-			{
-				label:"Connection settings",
-					accelerator:process.platform == "darwin" ? "Command+S" : "Ctrl+S",
-				click(){
-					settingsWindow();
-				}
-			},
-		/*	{
-				label:"Connect"
-			},
-			{
-				label:"Disconnect",
-					accelerator:process.platform == "darwin" ? "Command+D" : "Ctrl+D",
-				click(){
-					disconnect();
-				}
-			}*/
-		]
-	},
-	{
-		label: "Help",
-		submenu:[
-			{
-				label: "About",
-				click(){
-					aboutWindow();
-				}
-			}
-		]
-	}
-];
-
-// If OSX, add empty object to menu
-if(process.platform === "darwin"){
-	mainMenuTemplate.unshift({});
-}
-
-// Add developer tools option if in dev
-if(process.env.NODE_ENV !== "production"){
-	mainMenuTemplate.push({
-		label: "Developer Tools",
-		submenu:[
-			{
-				role: "reload"
-			},
-			{
-				label: "Toggle DevTools",
-				accelerator:process.platform === "darwin" ? "Command+I" : "Ctrl+I",
-				click(item, focusedWindow){
-					focusedWindow.toggleDevTools();
-				}
-			}
-		]
-	});
-}
