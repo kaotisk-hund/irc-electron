@@ -35,15 +35,21 @@ process.env.NODE_ENV = "development";
  */
 let server;
 let nickname;
+let username;
 let client = null;
 let channel;
 let message;
 let win;
+let setWin;
+let about;
+let data;
+let hash;
+let mdata;
 
 
 /*
- * This is the section where 2 windows are set.
- * mainWindow() and settingsWindow().
+ * This is the section where 3 windows are set.
+ * mainWindow(), settingsWindow() and aboutWindow().
  */
 
 /*
@@ -60,7 +66,7 @@ function mainWindow () {
 		slashes: true
 	}));
 
-	// Open the DevTools.
+	// Open the DevTools.  // TODO: Remove
 	// win.webContents.openDevTools() // Temporarily commented out, as we have the option from the menu.
 
 	// Emitted when the window is closed.
@@ -76,7 +82,6 @@ function mainWindow () {
 	const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 	// Insert menu
 	Menu.setApplicationMenu(mainMenu);
-	// return win; // Might be useless
 }
 
 /*
@@ -141,16 +146,16 @@ function addFileToBoard(data){
 // Add a message at channel listener
 ipcMain.on("sig", function(e,data){
 	addMessageToBoard(data);
-});
+}); // I think it's not used anywhere
 
 // Initiator for IPFS
 function ipfsinit(client, ipfs, file, name){
-	cl = ipfs("localhost",5001); // Just connect
-	console.log("IPFS connected");
+	var cl = ipfs("localhost",5001); // Just connect
+	//console.log("IPFS connected");
 	// The following is the way of getting files to add them to ipfs (buffer type)
 	fs.readFile(file, function(err, data){
 		console.log("File read!");
-		cl.files.add(data, function(err, filesAdded){ // Test line for adding // TODO: get the ipfs hash back
+		cl.files.add(data, function(err, filesAdded){ // Test line for adding
 			file1 = filesAdded[0];
 			console.log("File uploaded");
 			file = name;
@@ -165,7 +170,41 @@ function ipfsinit(client, ipfs, file, name){
 	
 }
 
+// Sets event listeners for various stuff
+function setListeners(client){
+	// For finding messages on current channel
+	client.addListener("message"+channel, function (from, message) {
+		data = {from, message};
+		addMessageToBoard(data);
+	});
 
+	// For sending messages
+	ipcMain.on("irc_send", function(e, data){
+		message = data;
+		if (client === null) {
+		//	console.log("wtf??? Maybe disconnected... Most likely.")
+		} else {
+		//	console.log("Seems you are online... going to send that message...")
+			client.say(channel,message);
+		}
+		from = nickname;
+		data = {from, message};
+		addMessageToBoard(data);
+	})
+
+	// For uploading files
+	ipcMain.on("ipfs_upload", function(e, dfile, dname){
+		console.log(dfile);
+		file = dfile;
+		name = dname;
+		if (client === null) {
+			console.log("Tried for client... none found");
+		} else {
+			console.log("Seems okay... going to send that file...");
+			ipfsinit(client, ipfs, file, name);
+		}
+	});
+}
 
 // Connect Function
 function connect(e, thadata, client){
@@ -193,7 +232,7 @@ function connect(e, thadata, client){
 		userName: username,
 		realName: realname
 		});
-	 	
+
 		client.addListener("registered", function(mess){
 			//console.log("CDed");
 			//console.log("Nickname: " + client.nick);
@@ -220,37 +259,7 @@ function disconnect(client){
 	client = null;
 }
 
-function setListeners(client){
-	client.addListener("message"+channel, function (from, message) {
-		data = {from, message};
-		addMessageToBoard(data);
-	});
 
-	ipcMain.on("irc_send", function(e, data){
-		message = data;
-		if (client === null) {
-		//	console.log("wtf??? Maybe disconnected... Most likely.")
-		} else {
-		//	console.log("Seems you are online... going to send that message...")
-			client.say(channel,message);
-		}
-		from = nickname;
-		data = {from, message};
-		addMessageToBoard(data);
-	})
-
-	ipcMain.on("ipfs_upload", function(e, dfile, dname){
-		console.log(dfile);
-		file = dfile;
-		name = dname;
-		if (client === null) {
-			console.log("Tried for client... none found");
-		} else {
-			console.log("Seems okay... going to send that file...");
-			ipfsinit(client, ipfs, file, name);
-		}
-	});
-}
 
 
 // Catch irc_connect
@@ -352,7 +361,7 @@ const mainMenuTemplate =	[
 ];
 
 // If OSX, add empty object to menu
-if(process.platform == "darwin"){
+if(process.platform === "darwin"){
 	mainMenuTemplate.unshift({});
 }
 
@@ -366,7 +375,7 @@ if(process.env.NODE_ENV !== "production"){
 			},
 			{
 				label: "Toggle DevTools",
-				accelerator:process.platform == "darwin" ? "Command+I" : "Ctrl+I",
+				accelerator:process.platform === "darwin" ? "Command+I" : "Ctrl+I",
 				click(item, focusedWindow){
 					focusedWindow.toggleDevTools();
 				}
