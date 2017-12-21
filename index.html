@@ -103,11 +103,12 @@
 		 */
 		//const div = document.querySelector('.messages');
 		ipcRenderer.on('ipfs_file', function(e, data){
-			const p = document.createElement('p');
+			const p = document.createElement('pre');
 			p.className = 'file';
-			const file_des = document.createTextNode(data.file + " -> " + data.hash);
+			const file_des = document.createTextNode(data.file + " -> " + data.link);
 			p.appendChild(file_des);
 			div.appendChild(p);
+			p.scrollIntoView();
 		});
 
 		/*

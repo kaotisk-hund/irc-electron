@@ -254,8 +254,9 @@ function ipfsinit(client, ipfs, file, name){
 			//console.log("File uploaded");
 			file = name;
 			var hash = "/ipfs/" + file1.hash;
-			data = {file, hash};
-			mdata = name + " -> " + hash;
+			var link = "http://127.0.0.1:8080" + hash;
+			data = {file, link};
+			mdata = name + " -> " + link;
 			client.say(channel, mdata);
 			addFileToBoard(data);
 		});
