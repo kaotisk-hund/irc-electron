@@ -49,12 +49,49 @@ let mdata;
 let cl;
 
 /*
+ * Creates settings window
+ */
+function settingsWindow(){
+	setWin = new BrowserWindow({width: 300, height: 350});
+
+	setWin.loadURL(url.format({
+		pathname: path.join(__dirname, "settings.html"),
+		protocol: "file:",
+		slashes: true
+	}));
+	setWin.on("closed", () => {
+			// Dereference the window object, usually you would store windows
+			// in an array if your app supports multi windows, this is the time
+			// when you should delete the corresponding element.
+			setWin = null;
+	});
+}
+
+/*
+ * Creates about window
+ */
+function aboutWindow(){
+	about = new BrowserWindow({width: 320, height: 200});
+
+	about.loadURL(url.format({
+		pathname: path.join(__dirname, "about.html"),
+		protocol: "file:",
+		slashes: true
+	}));
+	about.on("closed", () => {
+			// Dereference the window object, usually you would store windows
+			// in an array if your app supports multi windows, this is the time
+			// when you should delete the corresponding element.
+			about = null;
+	});
+}
+
+/*
  * This is the part of the program that creates
  * the main menu.
  *
+ * Create menu template
  */
-
-// Create menu template
 const mainMenuTemplate =	[
 	// Each object is a dropdown
 	{
@@ -140,14 +177,8 @@ if(process.env.NODE_ENV !== "production"){
 	});
 }
 
-
 /*
- * This is the section where 3 windows are set.
- * mainWindow(), settingsWindow() and aboutWindow().
- */
-
-/*
- * Creates the main window!!!
+ * Creates the mainWindow() !!!
  */
 function mainWindow () {
 	// Create the browser window.
@@ -178,48 +209,6 @@ function mainWindow () {
 	Menu.setApplicationMenu(mainMenu);
 }
 
-/*
- * Creates settings window
- */
-function settingsWindow(){
-	setWin = new BrowserWindow({width: 300, height: 350});
-
-	setWin.loadURL(url.format({
-		pathname: path.join(__dirname, "settings.html"),
-		protocol: "file:",
-		slashes: true
-	}));
-	setWin.on("closed", () => {
-			// Dereference the window object, usually you would store windows
-			// in an array if your app supports multi windows, this is the time
-			// when you should delete the corresponding element.
-			setWin = null;
-	});
-}
-/*
- * Creates about window
- */
-function aboutWindow(){
-	about = new BrowserWindow({width: 320, height: 200});
-
-	about.loadURL(url.format({
-		pathname: path.join(__dirname, "about.html"),
-		protocol: "file:",
-		slashes: true
-	}));
-	about.on("closed", () => {
-			// Dereference the window object, usually you would store windows
-			// in an array if your app supports multi windows, this is the time
-			// when you should delete the corresponding element.
-			about = null;
-	});
-}
-
-
-
-
-
-// SOME OTHER PART OF THE PROGRAM
 /*
  * A function for sending messages to mainWindow
  */
