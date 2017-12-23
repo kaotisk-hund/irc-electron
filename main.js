@@ -47,7 +47,7 @@ let data;
 let hash;
 let mdata;
 let cl;
-let tray = null
+let tray = null;
 
 /*
  * Creates settings window
@@ -359,8 +359,8 @@ ipcMain.on("irc_connect", function(e, thedata){
 // Some APIs can only be used after this event occurs.
 app.on("ready", mainWindow);
 
-app.on('ready', () => {
-	tray = new Tray('assets/icons/png/icon.png');
+app.on("ready", () => {
+	tray = new Tray("assets/icons/png/icon.png");
 	const contextMenu = Menu.buildFromTemplate([
 		{
 			label: "Quit",
@@ -368,11 +368,11 @@ app.on('ready', () => {
 				app.quit();
 			}
 		}
- 	])
- 	tray.on('click', () => {
-		win.isVisible() ? win.hide() : win.show()
+	]);
+	tray.on("click", () => {
+		win.isVisible() ? win.hide() : win.show();
 	});
-	tray.setToolTip('This is my application.');
+	tray.setToolTip("irc-electron");
 	tray.setContextMenu(contextMenu);
 });
 
