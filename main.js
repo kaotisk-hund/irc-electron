@@ -8,7 +8,7 @@
  */
 
 // Getting 4 basic elements of electron into place
-const {app, BrowserWindow, ipcMain, Menu} = require("electron");
+const {app, BrowserWindow, ipcMain, Menu, Tray} = require("electron");
 // Required so we can load urls
 const url = require("url");
 // ... and paths
@@ -47,6 +47,7 @@ let data;
 let hash;
 let mdata;
 let cl;
+let tray = null
 
 /*
  * Creates settings window
@@ -357,6 +358,23 @@ ipcMain.on("irc_connect", function(e, thedata){
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", mainWindow);
+
+app.on('ready', () => {
+	tray = new Tray('assets/icons/png/icon.png');
+	const contextMenu = Menu.buildFromTemplate([
+		{
+			label: "Quit",
+			click(){
+				app.quit();
+			}
+		}
+ 	])
+ 	tray.on('click', () => {
+		win.isVisible() ? win.hide() : win.show()
+	});
+	tray.setToolTip('This is my application.');
+	tray.setContextMenu(contextMenu);
+});
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
