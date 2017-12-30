@@ -33,10 +33,13 @@
 		<div class="send">
 			<form id="messaging">
 				<div class="grid-x">
-					<div class="small-9 cell">
+					<div class="small-2 cell" id="nickname">
+						<p id="nickname"></p>
+					</div>
+					<div class="small-8 cell">
 						<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
 					</div>
-					<div class="small-3 cell">
+					<div class="small-2 cell">
 						<button id="message_send" class="button" type="submit">Send</button>
 					</div>
 				</div>
@@ -123,7 +126,14 @@
 			const cded_mess = 'Connected';
 			button_dced.innerHTML = cded_mess;
 		});
-		
+
+		/*
+		 * Show the nickname next to message field so you know how you are :p
+		 */
+		const nickname = document.querySelector('#nickname');
+		ipcRenderer.on('irc_nick', function(e, data){
+			nickname.textContent = data;
+		})
 
 	</script>
 </body>

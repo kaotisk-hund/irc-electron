@@ -323,6 +323,7 @@ function connect(e, thadata, client){
 			//console.log("Nickname: " + client.nick);
 			//console.log(mess);
 			win.webContents.send("irc_cded");
+			win.webContents.send("irc_nick", client.nick);
 			client.join(channel);
 			setListeners(client);
 		});
