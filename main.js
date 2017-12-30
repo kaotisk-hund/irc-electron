@@ -340,28 +340,29 @@ function connect(e, thadata, client){
 	//console.log(".............")
 }
 
+// Unused... I was going to add a disconnect function
+// but it seems node-irc has something for this. I guess
+// I have TODO: Add disconnect option!
 function disconnect(client){
 	client.disconnect();
 	client = null;
 }
 
-
-
-
-// Catch irc_connect
+// Catch irc_connect, when the user triggers connection.
 ipcMain.on("irc_connect", function(e, thedata){
 	client = connect(e, thedata, client);
 });
-
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", mainWindow);
 
+// Here I use the app's icon to let it run on tray.
 app.on("ready", () => {
 	tray = new Tray("assets/icons/png/icon.png");
+
+	// Just a quit option
 	const contextMenu = Menu.buildFromTemplate([
 		{
 			label: "Quit",
@@ -370,9 +371,12 @@ app.on("ready", () => {
 			}
 		}
 	]);
+
+	// Show/hide on click
 	tray.on("click", () => {
 		win.isVisible() ? win.hide() : win.show();
 	});
+
 	tray.setToolTip("irc-electron");
 	tray.setContextMenu(contextMenu);
 });
