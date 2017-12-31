@@ -24,41 +24,39 @@
 	<div class="grid-container">
 		<div class="grid-x">
 			<div class="small-12 cell messages" style="
-				max-height: 400px;
+				max-height: 330px;
 				overflow: scroll;
-				height: 400px;
+				height: 330px;
 			">
 			</div>
 		</div>
 	</div>
 	<!-- Sending messages and files -->
-	<div class="grid-container">
-		<div class="send">
-			<form id="messaging">
-				<div class="grid-x">
-					<div class="small-2 cell" id="nickname">
-						<p id="nickname"></p>
-					</div>
-					<div class="small-8 cell">
-						<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
-					</div>
-					<div class="small-2 cell">
-						<button id="message_send" class="button" type="submit">Send</button>
-					</div>
+	<div class="grid-container" id="send">
+		<form id="messaging">
+			<div class="grid-x">
+				<div class="small-2 cell" id="nickname">
+					<p id="nickname"></p>
 				</div>
-			</form>
-			<form id="sharing" method="post" enctype="multipart/form-data">
-				<div class="grid-x">
-					<div class="small-7 cell">
-						<label for="file">Choose file to upload</label>
-						<input type="file" id="file" name="file">
-					</div>
-					<div class="small-5 cell">
-						<button id="file_upload" class="button">Share!</button>
-					</div>
+				<div class="small-8 cell">
+					<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
 				</div>
-			</form>
-		</div>
+				<div class="small-2 cell">
+					<button id="message_send" class="button" type="submit">Send</button>
+				</div>
+			</div>
+		</form>
+		<form id="sharing" method="post" enctype="multipart/form-data">
+			<div class="grid-x">
+				<div class="small-7 cell">
+					<label for="file">Choose file to upload</label>
+					<input type="file" id="file" name="file">
+				</div>
+				<div class="small-5 cell">
+					<button id="file_upload" class="button">Share!</button>
+				</div>
+			</div>
+		</form>
 	</div>
 
 	<script>
@@ -72,9 +70,7 @@
 		function sendMessage(e){
 			e.preventDefault();
 			message = document.querySelector('#message').value;
-
 			ipcRenderer.send('irc_send', message);
-
 			message = '';
 			document.querySelector('#message').value = '';
 		}
