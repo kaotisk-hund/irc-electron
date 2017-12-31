@@ -12,7 +12,8 @@
 	<div id="main" class="grid-container">
 		<div id="top" class="grid-x">
 			<div id="title-i-guess" class="small-9 cell">
-				<h2>Messages</h2>
+				<h2 id="channel">Messages</h2>
+				<h3 id="topic"></h3>
 			</div>
 			<div id="status" class="small-3 cell">
 				<button id="status-button" class="button alert">Disconnected</button>
@@ -130,13 +131,23 @@
 		});
 
 		/*
-		 * Show the nickname next to message field so you know how you are :p
+		 * Show the nickname next to message field so you know how
+		 * you are.
 		 */
 		const nickname = document.querySelector('#nickname');
 		ipcRenderer.on('irc_nick', function(e, data){
 			nickname.textContent = data;
-		})
+		});
 
+		/*
+		 * Show channel and topic on top
+		 */
+		const channel = document.querySelector('#channel');
+		const topic = document.querySelector('#topic');
+		ipcRenderer.on('irc_chann', function(e, data){
+			topic.textContent = data.topic;
+			channel.textContent = data.channel;
+		});
 	</script>
 </body>
 </html>

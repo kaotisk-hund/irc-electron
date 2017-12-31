@@ -334,6 +334,11 @@ function connect(e, thadata, client){
 			};
 			addMessageToBoard(data);
 		});
+		client.addListener("topic", function (channel, topic){
+			data = {channel, topic};
+			win.webContents.send("irc_chann", data);
+		});
+
 	} else {
 		//console.log("Now client is not set null BUT nothing else happens :D")
 	}
