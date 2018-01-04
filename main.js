@@ -292,7 +292,7 @@ function setListeners(client){
 
 	// For changing nickname
 	ipcMain.on("irc_set_nick", function(e, nickname){
-		client.send('NICK', nickname);
+		client.send("NICK", nickname);
 	});
 }
 
