@@ -5,3 +5,31 @@ pre {
 .file {
 	color: blue;
 }
+
+#main {
+	padding: 0px;
+}
+
+#send {
+	background-color: rgba(80, 46, 34, 0.86);
+	padding: 3px;
+	color: rgba(255, 255, 255, 0.8);
+}
+
+#messenger {
+	background-color: rgba(56, 144, 171, 0.81);
+}
+
+.messages {
+	background-color: rgba(51, 55, 72, 0.79);
+	color: rgba(255,255,255,0.9);
+}
+
+#status {
+	background-color: rgb(41, 135, 245);
+}
+
+#title-i-guess {
+	background-color: white;
+	color: rgb(86, 85, 90);
+}
