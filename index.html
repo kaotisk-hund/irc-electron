@@ -33,19 +33,26 @@
 	</div>
 	<!-- Sending messages and files -->
 	<div class="grid-container" id="send">
-		<form id="messaging">
-			<div class="grid-x">
-				<div class="small-2 cell" id="nickname">
-					<p id="nickname"></p>
-				</div>
-				<div class="small-8 cell">
-					<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
-				</div>
-				<div class="small-2 cell">
-					<button id="message_send" class="button" type="submit">Send</button>
-				</div>
+		
+		<div class="grid-x">
+			<div class="small-2 cell">
+				<form id="nicknaming" method="post">
+					<input maxlength="9" type="text" name="nickname" id="nickname">
+				</form>				
 			</div>
-		</form>
+			<form id="messaging" class="small-10 cell">
+				<div class="grid-x">
+					<div class="small-10 cell">
+						<input type="text" id="message" placeholder="Enter your message here..." autofocus="true">
+					</div>
+					<div class="small-2 cell">
+						<button id="message_send" class="button" type="submit">Send</button>
+					</div>
+				</div>
+				
+			</form>
+		</div>
+		
 		<form id="sharing" method="post" enctype="multipart/form-data">
 			<div class="grid-x">
 				<div class="small-7 cell">
@@ -85,6 +92,16 @@
 			ipcRenderer.send('ipfs_upload', file.path, file.name);
 			file = '';
 			//document.querySelector('#message').value = '';
+		}
+
+		/*
+		 * Setting nickname
+		 */
+		document.querySelector('#nicknaming').addEventListener('submit',changeNick);
+		function changeNick(e){
+			e.preventDefault();
+			var nick = document.querySelector('#nickname').value;
+			ipcRenderer.send('irc_set_nick', nick);
 		}
 
 		/*
@@ -132,7 +149,7 @@
 		 */
 		const nickname = document.querySelector('#nickname');
 		ipcRenderer.on('irc_nick', function(e, data){
-			nickname.textContent = data;
+			nickname.value = data;
 		});
 
 		/*

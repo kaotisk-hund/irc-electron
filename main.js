@@ -289,6 +289,11 @@ function setListeners(client){
 			ipfsinit(client, ipfs, file, name);
 		}
 	});
+
+	// For changing nickname
+	ipcMain.on("irc_set_nick", function(e, nickname){
+		client.send('NICK', nickname);
+	});
 }
 
 // Connect Function
@@ -337,6 +342,12 @@ function connect(e, thadata, client){
 		client.addListener("topic", function (channel, topic){
 			data = {channel, topic};
 			win.webContents.send("irc_chann", data);
+		});
+
+		client.addListener("nick", function (onick, nnick){
+			
+			nickname = nnick;
+			win.webContents.send("irc_nick", client.nick);
 		});
 
 	} else {
