@@ -305,14 +305,6 @@ function connect(e, thadata, client){
 	channel = thadata.channel;
 	username = nickname+"_kirc";
 	realname = nickname+" at KiRc";
-	
-	//console.log("=========	 Your login info	 =========")
-	//console.log(server)
-	//console.log(nickname)
-	//console.log(channel)
-
-
-	//console.log(".............")
 
 	if (client === null){
 		client = new irc.Client(server, nickname, {
@@ -324,9 +316,6 @@ function connect(e, thadata, client){
 		});
 
 		client.addListener("registered", function(mess){
-			//console.log("CDed");
-			//console.log("Nickname: " + client.nick);
-			//console.log(mess);
 			win.webContents.send("irc_cded");
 			win.webContents.send("irc_nick", client.nick);
 			client.join(channel);
@@ -345,15 +334,11 @@ function connect(e, thadata, client){
 		});
 
 		client.addListener("nick", function (onick, nnick){
-			
 			nickname = nnick;
 			win.webContents.send("irc_nick", client.nick);
 		});
-
 	} else {
-		//console.log("Now client is not set null BUT nothing else happens :D")
 	}
-	//console.log(".............")
 }
 
 // Unused... I was going to add a disconnect function
