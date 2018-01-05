@@ -296,7 +296,17 @@ function setListeners(client){
 	});
 }
 
-// Connect Function
+/*
+ * connect() Function
+ * This function is used to make the connection with the
+ * IRC server, set some listeners for events and pass the
+ * necessary variables to other places where needed.
+ * 
+ * It gets 3 variables.
+ * e, which contains possible errors,
+ * thadata, which contains connection information and
+ * client, where the IRC client object is stored.
+ */
 function connect(e, thadata, client){
 	//win.webContents.send("irc:connect", thadata);
 	//console.log(e)
@@ -307,6 +317,7 @@ function connect(e, thadata, client){
 	realname = nickname+" at KiRc";
 
 	if (client === null){
+		// Create new client while connecting to the server
 		client = new irc.Client(server, nickname, {
 		channels: [
 			channel
@@ -315,12 +326,19 @@ function connect(e, thadata, client){
 		realName: realname
 		});
 
+		/*
+		 * Wait for connection to inform irc-electron and
+		 * join a channel. Then set more listeners. See
+		 * setListeners() function.
+		 */
 		client.addListener("registered", function(mess){
 			win.webContents.send("irc_cded");
 			win.webContents.send("irc_nick", client.nick);
 			client.join(channel);
 			setListeners(client);
 		});
+
+		// Wait for and print the Message of the Day.
 		client.addListener("motd", function(motd){
 			data = {
 				from:"Message of the day",
@@ -328,16 +346,26 @@ function connect(e, thadata, client){
 			};
 			addMessageToBoard(data);
 		});
+
+		// Wait for topic change so we can put it on top.
 		client.addListener("topic", function (channel, topic){
 			data = {channel, topic};
 			win.webContents.send("irc_chann", data);
 		});
 
+		/*
+		 * When we change the nickname make sure we change the
+		 * program's variables too.
+		 */
 		client.addListener("nick", function (onick, nnick){
 			nickname = nnick;
 			win.webContents.send("irc_nick", client.nick);
 		});
 	} else {
+		/*
+		 * I was left over with an if-else statement where the
+		 * else never do anything.
+		 */
 	}
 }
 
