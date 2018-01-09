@@ -1,6 +1,7 @@
 # irc-electron
 
 [![Build Status](https://travis-ci.org/kaotisk-hund/irc-electron.svg?branch=master)](https://travis-ci.org/kaotisk-hund/irc-electron)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9fb629f766e7483b9a1d78acf44e0353)](https://www.codacy.com/app/kaotisk-hund/irc-electron?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kaotisk-hund/irc-electron&amp;utm_campaign=Badge_Grade)
 
 A multiplatform IRC client
 
