@@ -35,3 +35,13 @@ cd irc-electron
 npm install
 npm start
 ```
+
+## Contribute
+
+Any kind of contribution is highly acceptable. File an issue for whatever you think is not going well either in functionality or on your eye.
+
+This project is soon going to have a roadmap and various things will be brought up as the time goes through.
+
+## License
+
+This piece of software is licensed under [GPL-3.0](https://github.com/kaotisk-hund/irc-electron/blob/master/LICENSE).
