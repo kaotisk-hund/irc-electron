@@ -327,15 +327,19 @@ function connect(e, thadata, client){
 		});
 
 		/*
+		 * Well, after creating a client, we add some listeners
+		 * here. See setListeners() function.
+		 */
+		setListeners(client);
+		/*
 		 * Wait for connection to inform irc-electron and
-		 * join a channel. Then set more listeners. See
-		 * setListeners() function.
+		 * join a channel. Also, we send the nickname for
+		 * the user to see and change.
 		 */
 		client.addListener("registered", function(mess){
 			win.webContents.send("irc_cded");
 			win.webContents.send("irc_nick", client.nick);
 			client.join(channel);
-			setListeners(client);
 		});
 
 		// Wait for and print the Message of the Day.
