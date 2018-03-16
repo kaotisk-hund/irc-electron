@@ -19,6 +19,9 @@ const irc = require("irc");
 
 // Added ipfs
 const ipfs = require("ipfs-api");
+/*const daipfs = require("ipfs");
+const node = new daipfs();
+*/
 
 // so we can read local files
 const fs = require("fs");
