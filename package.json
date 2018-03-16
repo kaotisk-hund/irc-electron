@@ -1,6 +1,6 @@
 {
   "name": "irc-electron",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "IRC client with electron GUI",
   "main": "main.js",
   "scripts": {
@@ -22,10 +22,11 @@
   "author": "Kaotisk Hund",
   "license": "GPL-3.0",
   "dependencies": {
-    "electron": "^1.7.9",
+    "electron": "^1.7.11",
     "fs": "0.0.1-security",
     "ipfs": "^0.26.0",
-    "irc": "^0.5.2"
+    "irc": "^0.5.2",
+    "js-ipfs": "0.0.301"
   },
   "devDependencies": {
     "electron-packager": "^9.1.0"
